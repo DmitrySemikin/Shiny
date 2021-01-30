@@ -53,7 +53,7 @@ include ( cmake/extra/CheckPrototypeDefinition.cmake )
 if ( MSVC OR MSVC_IDE OR MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR CMAKE_COMPILER_2005 OR MSVC90 OR MSVC10 )
     # Define the export symbols
     set ( SHINY_INLINE "inline" )
-    set ( SHINY_UNUSED "" )
+    set ( SHINY_UNUSED " " )
     set ( SHINY_EXPORT "__declspec(dllexport)" )
 
     # Define the standard integer types

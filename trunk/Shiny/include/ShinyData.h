@@ -25,6 +25,8 @@ THE SOFTWARE.
 #ifndef SHINY_DATA_H
 #define SHINY_DATA_H
 
+#include "config.h"
+
 /*---------------------------------------------------------------------------*/
 
 typedef struct {

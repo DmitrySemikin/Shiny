@@ -36,8 +36,8 @@
 **/
 
 /* Core platform type */
-#define WINDOWS	0x01
-#define POSIX 	0x02
+#define PLATFORM_TYPE_WINDOWS	0x01
+#define PLATFORM_TYPE_POSIX 	0x02
 
 #cmakedefine PLATFORM_TYPE @PLATFORM_TYPE@
 
