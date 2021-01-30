@@ -29,6 +29,10 @@ project ( shiny )
 # Set-up CMake
 cmake_minimum_required ( VERSION 2.6 )
 
+cmake_policy(SET CMP0054 NEW)
+
+
+
 # Include the checks for library functions
 include ( CheckLibraryExists )
 
@@ -162,11 +166,11 @@ endif ( WIN32 )
 
 if ( NOT APPLE )
    # check 64 bit
-   if ( CMAKE_SIZEOF_VOID_P EQUALS 4 )
+   if ( CMAKE_SIZEOF_VOID_P EQUAL 4 )
      set ( HAVE_64_BIT 0 )
-   else ( CMAKE_SIZEOF_VOID_P EQUALS 4 )
+   else ( CMAKE_SIZEOF_VOID_P EQUAL 4 )
      set ( HAVE_64_BIT 1 )
-   endif ( CMAKE_SIZEOF_VOID_P EQUALS 4 )
+   endif ( CMAKE_SIZEOF_VOID_P EQUAL 4 )
 
    # check endianness
    include ( TestBigEndian )
