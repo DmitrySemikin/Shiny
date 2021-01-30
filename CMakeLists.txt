@@ -52,19 +52,19 @@ include ( cmake/extra/CheckPrototypeDefinition.cmake )
 # Microsoft compilers
 if ( MSVC OR MSVC_IDE OR MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR CMAKE_COMPILER_2005 OR MSVC90 OR MSVC10 )
     # Define the export symbols
-    set ( SHINY_INLINE inline )
-    set ( SHINY_UNUSED  )
-    set ( SHINY_EXPORT __declspec\(dllexport\) )
+    set ( SHINY_INLINE "inline" )
+    set ( SHINY_UNUSED "" )
+    set ( SHINY_EXPORT "__declspec(dllexport)" )
 
     # Define the standard integer types
     if ( CYGWIN )
-        set ( UINT32_T  u_int32_t )
-        set ( UINT64_T  u_int64_t )
+        set ( UINT32_T  "u_int32_t" )
+        set ( UINT64_T  "u_int64_t" )
     else ( CYGWIN )
-        set ( INT32_T   int                 )
-        set ( UINT32_T  unsigned int        )
-        set ( INT64_T   __int64             )
-        set ( UINT64_T  unsigned __int64    )
+        set ( INT32_T   "int"                 )
+        set ( UINT32_T  "unsigned int"        )
+        set ( INT64_T   "__int64"             )
+        set ( UINT64_T  "unsigned __int64"    )
     endif ( CYGWIN )
 endif ( MSVC OR MSVC_IDE OR MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR CMAKE_COMPILER_2005 OR MSVC90 OR MSVC10 )
 
