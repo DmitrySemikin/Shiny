@@ -2,6 +2,9 @@
 ## Build Directories/Files
 ##
 
+build*/
+.vscode/
+
 # CMake
 CMakeCache.txt
 CMakeFiles/
