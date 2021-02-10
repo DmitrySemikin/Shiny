@@ -18,7 +18,4 @@
 /* Include the library defines */
 #include "config_define.h"
 
-/* Include the Shiny version defines */
-#include "config_version.h"
-
 #endif /* CONFIG_H */
