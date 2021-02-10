@@ -161,7 +161,7 @@ endif ( NOT APPLE )
 ##
 
 # Set the global configure file
-configure_file (include/config/config_cmake.h.in include/config/config_cmake.h)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/include/config/config_cmake.h.in ${CMAKE_CURRENT_SOURCE_DIR}/include/config/config_cmake.h)
 
 ##
 ## C Library Sources
