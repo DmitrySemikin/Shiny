@@ -1,4 +1,4 @@
-= Package of the Shiny Profiler by Aidin Abedi
+# Package of the Shiny Profiler by Aidin Abedi
 
 This repository is, essentially, the same as the upstream Shiny profiler
 held in a SourceForge SVN repository. The project home page for Shiny
@@ -8,20 +8,20 @@ projects documentation and discussion groups.
 Our fork uses CMake to build (and install) Shiny, but is otherwise
 identical with the upstream version.
 
-== Updating
+## Updating
 
 Updates to this library should be pulled from the upstream Shiny
 Subversion repository. With `git-svn` you should be able to do
 
-  git-svn fetch
+    git-svn fetch
 
 to get the latest version of the upstream code. You may need to do
 
-  git-svn init https://shinyprofiler.svn.sourceforge.net/svnroot/shinyprofiler
+    git-svn init https://shinyprofiler.svn.sourceforge.net/svnroot/shinyprofiler
 
 if Git has forgotten where the repository is.
 
-== Copyright
+## Copyright
 
 Copyright (c) 2011 Aidin Abedi
 Copyright (c) 2011 David Love. 
