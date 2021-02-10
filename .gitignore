@@ -16,7 +16,7 @@ install_manifest.txt
 Makefile
 
 # CMake Project config file
-lib/config/config_cmake.h
+include/config/config_cmake.h
 
 # CTest
 Testing/

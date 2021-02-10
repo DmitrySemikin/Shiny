@@ -92,7 +92,7 @@ endif ( "${CMAKE_C_COMPILER_ID}" MATCHES "Clang" )
 ##
 
 # Add the global configure file to the search path
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/lib/config )
+include_directories(include/config)
 
 ##
 ## Header File Configuration
@@ -185,23 +185,23 @@ endif ( NOT APPLE )
 ##
 
 # Set the global configure file
-configure_file ( ${CMAKE_CURRENT_SOURCE_DIR}/lib/config/config_cmake.h.in ${CMAKE_CURRENT_SOURCE_DIR}/lib/config/config_cmake.h )
+configure_file (include/config/config_cmake.h.in include/config/config_cmake.h)
 
 ##
 ## C Library Sources
 ##
 
 # Add the Shiny header files to the search path
-include_directories ( ${CMAKE_CURRENT_SOURCE_DIR}/trunk/Shiny/include )
+include_directories (include)
 
 add_library ( shiny
-    trunk/Shiny/src/ShinyManager.c
-    trunk/Shiny/src/ShinyNode.c
-    trunk/Shiny/src/ShinyNodePool.c
-    trunk/Shiny/src/ShinyNodeState.c
-    trunk/Shiny/src/ShinyOutput.c
-    trunk/Shiny/src/ShinyTools.c
-    trunk/Shiny/src/ShinyZone.c
+        src/ShinyManager.c
+        src/ShinyNode.c
+        src/ShinyNodePool.c
+        src/ShinyNodeState.c
+        src/ShinyOutput.c
+        src/ShinyTools.c
+        src/ShinyZone.c
     )
 
 ##
@@ -209,7 +209,7 @@ add_library ( shiny
 #link_directories (${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable ( shiny-simple
-    trunk/Samples/Simple/Simple.cpp
+        examples/Simple/Simple.cpp
     )
 
 target_link_libraries (shiny-simple shiny)
