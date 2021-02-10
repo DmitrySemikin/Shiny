@@ -19,37 +19,32 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-##
-## Project Definition
-##
+#=============================================================================
 
-# Project Name
-project ( shiny )
+# We want to use CMake version, which is by default available on still
+# supported CentOS (currently CentOS 7 and it supports CMake 2.8)
 
-# Set-up CMake
-cmake_minimum_required ( VERSION 2.6 )
-
+cmake_minimum_required ( VERSION 2.8 )
 cmake_policy(SET CMP0054 NEW)
 
+#=============================================================================
 
 
-# Include the checks for library functions
+project ( shiny )
+
+
+#=============================================================================
+
 include ( CheckLibraryExists )
-
-# Include the checks for header files
 include ( CheckIncludeFiles )
-
-# Include the checks for type symbols
 include ( CheckTypeSize )
-
-# Include the checks for functions
 include ( cmake/extra/CheckPrototypeDefinition.cmake )
 
-##
-## Compiler Configuration
-##
 
-# Microsoft compilers
+#=============================================================================
+
+## Definition of the variables for config_cmake.h (generated from config_cmake.h.in)
+
 if ( MSVC OR MSVC_IDE OR MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR CMAKE_COMPILER_2005 OR MSVC90 OR MSVC10 )
     # Define the export symbols
     set ( SHINY_INLINE "inline" )
@@ -68,7 +63,6 @@ if ( MSVC OR MSVC_IDE OR MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR CMAKE_COMPILER_
     endif ( CYGWIN )
 endif ( MSVC OR MSVC_IDE OR MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR CMAKE_COMPILER_2005 OR MSVC90 OR MSVC10 )
 
-# GNU Compiler
 if ( ${CMAKE_COMPILER_IS_GNUCC} )
     message ( "-- Using GCC compiler profile...")
 
@@ -88,6 +82,10 @@ if ( "${CMAKE_C_COMPILER_ID}" MATCHES "Clang" )
     message ( "-- Using Clang compiler profile...")
 
 endif ( "${CMAKE_C_COMPILER_ID}" MATCHES "Clang" )
+
+
+#=============================================================================
+
 
 ##
 ## Project Configuration
