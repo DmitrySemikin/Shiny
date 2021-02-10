@@ -1,7 +1,7 @@
 #ifndef SHINY_TOOLS_H
 #define SHINY_TOOLS_H
 
-#include "ShinyPrereqs.h"
+#include "config.h"
 
 /*---------------------------------------------------------------------------*/
 

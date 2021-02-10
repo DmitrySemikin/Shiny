@@ -12,9 +12,6 @@
 /* Include the platform specific headers */
 #include "config_header.h"
 
-/* Include the headers for the needed function prototypes */
-#include "config_function.h"
-
 /* Include the library defines */
 #include "config_define.h"
 
