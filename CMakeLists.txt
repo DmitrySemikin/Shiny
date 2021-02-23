@@ -189,13 +189,4 @@ add_library (
         src/ShinyZone.c
 )
 
-##
-
-#link_directories (${CMAKE_CURRENT_SOURCE_DIR})
-
-add_executable (
-    shiny-simple
-        examples/Simple/Simple.cpp
-)
-
-target_link_libraries (shiny-simple das-shiny)
+add_subdirectory(examples)
