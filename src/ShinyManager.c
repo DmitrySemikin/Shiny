@@ -1,3 +1,6 @@
+// ShinyCommons.h must be included into all sources and headers as a first include
+#include "ShinyCommons.h"
+
 #include "ShinyManager.h"
 
 #include <memory.h>

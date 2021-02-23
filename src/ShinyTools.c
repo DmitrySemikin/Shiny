@@ -1,4 +1,6 @@
-#include "config.h"
+// ShinyCommons.h must be included into all sources and headers as a first include
+#include "ShinyCommons.h"
+
 #include "ShinyTools.h"
 
 /* Work out where timeval lives - non windows */

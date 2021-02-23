@@ -1,6 +1,10 @@
 #ifndef SHINY_NODE_H
 #define SHINY_NODE_H
 
+// ShinyCommons.h must be included into all sources and headers as a first include
+#include "ShinyCommons.h"
+
+
 #include "ShinyData.h"
 #include "ShinyTools.h"
 

@@ -1,6 +1,10 @@
 #ifndef SHINY_ZONE_H
 #define SHINY_ZONE_H
 
+// ShinyCommons.h must be included into all sources and headers as a first include
+#include "ShinyCommons.h"
+
+
 #include "ShinyData.h"
 #include <memory.h>
 

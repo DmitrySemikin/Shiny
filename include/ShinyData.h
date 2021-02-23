@@ -1,7 +1,8 @@
 #ifndef SHINY_DATA_H
 #define SHINY_DATA_H
 
-#include "config.h"
+// ShinyCommons.h must be included into all sources and headers as a first include
+#include "ShinyCommons.h"
 
 /*---------------------------------------------------------------------------*/
 

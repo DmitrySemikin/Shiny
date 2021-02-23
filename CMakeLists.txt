@@ -75,8 +75,6 @@ endif ( "${CMAKE_C_COMPILER_ID}" MATCHES "Clang" )
 ## Project Configuration
 ##
 
-# Add the global configure file to the search path
-include_directories(include/config)
 
 ##
 ## Header File Configuration

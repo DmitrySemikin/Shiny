@@ -1,6 +1,9 @@
 #ifndef SHINY_MACROS_H
 #define SHINY_MACROS_H
 
+// ShinyCommons.h must be included into all sources and headers as a first include
+#include "ShinyCommons.h"
+
 #include "ShinyManager.h"
 
 #if SHINY_IS_COMPILED == TRUE

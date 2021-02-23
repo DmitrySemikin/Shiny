@@ -1,3 +1,6 @@
+// ShinyCommons.h must be included into all sources and headers as a first include
+#include "ShinyCommons.h"
+
 #include "ShinyNode.h"
 #include "ShinyZone.h"
 #include "ShinyNodeState.h"

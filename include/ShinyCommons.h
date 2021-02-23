@@ -1,5 +1,9 @@
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef SHINY_COMMONS_H
+#define SHINY_COMMONS_H
+
+
+// This file should be included into all Shiny sources and headers (except config_cmake.h) as a first line.
+
 
 //======================================================================================================================
 
@@ -55,7 +59,7 @@
 
 
 /* Include the platform checks from CMake */
-#include "config_cmake.h"
+#include "config/config_cmake.h"
 
 
 
@@ -71,7 +75,7 @@
 
 #if PLATFORM_TYPE == PLATFORM_TYPE_WINDOWS
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <Windows.h>
 #endif
 
 /**
@@ -188,4 +192,4 @@ typedef uint64_t			shinytick_t;
 
 //======================================================================================================================
 
-#endif /* CONFIG_H */
+#endif /* SHINY_COMMONS_H */

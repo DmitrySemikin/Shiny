@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#include "config.h"
+#include "ShinyCommons.h"
 #include "Shiny.h"
 
 #ifdef _WIN32

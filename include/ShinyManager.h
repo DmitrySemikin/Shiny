@@ -1,6 +1,9 @@
 #ifndef SHINY_MANAGER_H
 #define SHINY_MANAGER_H
 
+// ShinyCommons.h must be included into all sources and headers as a first include
+#include "ShinyCommons.h"
+
 #include "ShinyZone.h"
 #include "ShinyNode.h"
 #include "ShinyNodePool.h"
