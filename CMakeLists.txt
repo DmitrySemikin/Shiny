@@ -1,12 +1,20 @@
 # We want to use CMake version, which is by default available on still
 # supported CentOS (currently CentOS 7 and it supports CMake 2.8)
 cmake_minimum_required ( VERSION 2.8 )
+
+cmake_policy(SET CMP0048 NEW)
 cmake_policy(SET CMP0054 NEW)
 
 #=============================================================================
 
 
-project ( shiny )
+project (
+    das-shiny
+        VERSION      "3.0.0"
+        DESCRIPTION  "C/C++ profiler with manual instrumentation. Based on original Shiny profiler by Aidin Abedi and David Love."
+        HOMEPAGE_URL "https://github.com/DmitrySemikin/das-shiny"
+        LANGUAGES    C CXX
+)
 
 
 #=============================================================================
@@ -170,7 +178,8 @@ configure_file (${CMAKE_CURRENT_SOURCE_DIR}/include/config/config_cmake.h.in ${C
 # Add the Shiny header files to the search path
 include_directories (include)
 
-add_library ( shiny
+add_library (
+    ${PROJECT_NAME}
         src/ShinyManager.c
         src/ShinyNode.c
         src/ShinyNodePool.c
@@ -178,14 +187,15 @@ add_library ( shiny
         src/ShinyOutput.c
         src/ShinyTools.c
         src/ShinyZone.c
-    )
+)
 
 ##
 
 #link_directories (${CMAKE_CURRENT_SOURCE_DIR})
 
-add_executable ( shiny-simple
+add_executable (
+    shiny-simple
         examples/Simple/Simple.cpp
-    )
+)
 
-target_link_libraries (shiny-simple shiny)
+target_link_libraries (shiny-simple das-shiny)
