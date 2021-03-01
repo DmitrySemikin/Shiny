@@ -66,6 +66,7 @@ void ShinyZone_enumerateZones(const ShinyZone* a_zone, T* a_this, void (T::*a_fu
     if (a_zone->next) ShinyZone_enumerateZones(a_zone->next, a_this, a_func);
 }
 
+// TODO: Fix this
 extern "C" { /* end of c++ */
 #endif
 

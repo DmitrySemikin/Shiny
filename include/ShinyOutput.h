@@ -43,6 +43,7 @@ SHINY_INLINE std::string ShinyZonesToString(const ShinyZone *a_root, uint32_t a_
     return str;
 }
 
+// TODO: Fix this
 extern "C" { /* end of c++ */
 #endif
 

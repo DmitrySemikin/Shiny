@@ -7,49 +7,32 @@
 
 //======================================================================================================================
 
-/* Include the configuration knobs: these must be included first
-** as they may affect the behaviour of the following configure files
-**/
-//#include "config_knobs.h"
+// TODO: What means "TRUE" and "FALSE" below???
 
-/* SHINY_IS_COMPILED is the master on or off swith at compile time. Define it to TRUE or FALSE before including header Shiny.h or inside ShinyConfig.h. Default is TRUE.
- */
+/** Use -DSHINY_IS_COMPILED=0 to compile out all shiny sources from your project. */
 #ifndef SHINY_IS_COMPILED
 #define SHINY_IS_COMPILED		TRUE
 #endif
 
-/* TODO:
- */
+/** Use -DSHINY_STATIC_LINK=0 to build shiny as a dynamic library (instead of satic). */
 #ifndef SHINY_STATIC_LINK
 #define SHINY_STATIC_LINK		TRUE
 #endif
 
-/* if SHINY_LOOKUP_RATE is defined to TRUE then Shiny will record the success of its hash function. This is useful for debugging. Default is FALSE.
- */
+/** if SHINY_LOOKUP_RATE is defined to TRUE (=1) then Shiny will record the success of its hash function. This is useful for debugging. Default is FALSE. */
 #ifndef SHINY_LOOKUP_RATE
 #define SHINY_LOOKUP_RATE		FALSE
 #endif
 
-/* if SHINY_HAS_ENABLED is defined to TRUE then Shiny can be enabled and disabled at runtime. TODO: bla bla...
- */
+/** if SHINY_HAS_ENABLED is defined to TRUE then Shiny can be enabled and disabled at runtime (but it has some overhead). */
 #ifndef SHINY_HAS_ENABLED
 #define SHINY_HAS_ENABLED		FALSE
 #endif
 
-/* TODO:
- */
 #define SHINY_OUTPUT_MODE_FLAT	0x1
-
-/* TODO:
- */
 #define SHINY_OUTPUT_MODE_TREE	0x2
-
-/* TODO:
- */
 #define SHINY_OUTPUT_MODE_BOTH	0x3
 
-/* TODO:
- */
 #ifndef SHINY_OUTPUT_MODE
 #define SHINY_OUTPUT_MODE		SHINY_OUTPUT_MODE_BOTH
 #endif
@@ -57,6 +40,7 @@
 
 //======================================================================================================================
 
+// TODO: Get rid of this one...
 
 /* Include the platform checks from CMake */
 #include "config/config_cmake.h"
@@ -69,16 +53,6 @@
 # include <inttypes.h>
 
 //======================================================================================================================
-
-/* Include the library defines */
-//#include "config_define.h"
-
-
-/*---------------------------------------------------------------------------*/
-/*																																					 */
-/*  Constants. Usually defined by the platform, but otherwise here					 */
-/*																																					 */
-/*---------------------------------------------------------------------------*/
 
 #ifndef FALSE
 #define FALSE	0x0

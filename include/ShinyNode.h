@@ -108,6 +108,7 @@ void ShinyNode_enumerateNodes(const ShinyNode* a_node, T* a_this, void (T::*a_fu
     if (a_node->nextSibling) ShinyNode_enumerateNodes(a_node->nextSibling, a_this, a_func);
 }
 
+// TODO: Fix this
 extern "C" { /* end of c++ */
 #endif
 
