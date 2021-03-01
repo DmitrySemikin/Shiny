@@ -75,25 +75,25 @@
 **/
 
 ///* Look for the C99 integer types */
-//#ifdef HAVE_INTTYPES_H
-//# include <inttypes.h>
-//#else
-//# error "Cannot build Shiny on this platform: The C99 integer types are undefined"
-//#endif
+#ifdef HAVE_INTTYPES_H
+# include <inttypes.h>
+#else
+# error "Cannot build Shiny on this platform: The C99 integer types are undefined"
+#endif
 
 ///* Look for the header files defining the constants for type lengths */
-//#ifdef HAVE_VALUES_H
-//# include <values.h>
-//#endif
+#ifdef HAVE_VALUES_H
+# include <values.h>
+#endif
 
-//#ifdef HAVE_FLOAT_H
-//# include <float.h>
-//#endif
-//
-//#ifdef HAVE_LIMITS_H
-//# include <limits.h>
-//#endif
-//
+#ifdef HAVE_FLOAT_H
+# include <float.h>
+#endif
+
+#ifdef HAVE_LIMITS_H
+# include <limits.h>
+#endif
+
 #ifdef EXPLICIT_MALLOC_H
 # include <malloc.h>
 #else
@@ -178,6 +178,18 @@ typedef UINT64_T	uint64_t;
 #endif
 
 typedef uint64_t			shinytick_t;
+
+
+
+#define SHINY_COMPILER_MSVC 123
+#define SHINY_COMPILER_OTHER 124
+
+#ifdef _MSC_VER
+#define SHINY_COMPILER SHINY_COMPILER_MSVC
+#else
+#define SHINY_COMPILER SHINY_COMPILER_OTHER
+#endif
+
 
 
 

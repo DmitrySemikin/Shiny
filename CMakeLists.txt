@@ -50,7 +50,7 @@ endif ( MSVC OR MSVC_IDE OR MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR CMAKE_COMPIL
 if ( ${CMAKE_COMPILER_IS_GNUCC} )
     message ( "-- Using GCC compiler profile...")
 
-    set ( SHINY_INLINE __inline__ )
+    set ( SHINY_INLINE "static __inline__" )
     set ( SHINY_UNUSED __attribute__\(\(unused\)\) )
     set ( SHINY_EXPORT __attribute__\(\(dllexport\)\) )
 endif ( ${CMAKE_COMPILER_IS_GNUCC} )
