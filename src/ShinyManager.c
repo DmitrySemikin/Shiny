@@ -6,6 +6,7 @@
 #include <memory.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #if SHINY_IS_COMPILED == TRUE
 

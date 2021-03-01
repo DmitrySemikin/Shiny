@@ -65,54 +65,14 @@
 
 //======================================================================================================================
 
-
-/* Include the platform specific headers */
-//#include "config_header.h"
-
-/**
-*** Header Includes: these are conditional, based on the results of the
-**  								 header checks above
-**/
-
-///* Look for the C99 integer types */
-#ifdef HAVE_INTTYPES_H
+// TODO: Use defines (or typedefs) to rename standard types and use aliases in code
 # include <inttypes.h>
-#else
-# error "Cannot build Shiny on this platform: The C99 integer types are undefined"
-#endif
-
-///* Look for the header files defining the constants for type lengths */
-#ifdef HAVE_VALUES_H
-# include <values.h>
-#endif
-
-#ifdef HAVE_FLOAT_H
-# include <float.h>
-#endif
-
-#ifdef HAVE_LIMITS_H
-# include <limits.h>
-#endif
-
-#ifdef EXPLICIT_MALLOC_H
-# include <malloc.h>
-#else
-# include <stdlib.h>
-#endif
-
-
 
 //======================================================================================================================
 
 /* Include the library defines */
 //#include "config_define.h"
 
-
-/**
-*** \note This file should be kept as small as possible: if it doesn't depend
-***       on the platform, it probably doesn't belong in here.
-***
-***/
 
 /*---------------------------------------------------------------------------*/
 /*																																					 */
