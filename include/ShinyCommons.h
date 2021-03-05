@@ -40,11 +40,6 @@
 
 //======================================================================================================================
 
-// TODO: Use defines (or typedefs) to rename standard types and use aliases in code
-# include <inttypes.h>
-
-//======================================================================================================================
-
 #ifndef FALSE
 #define FALSE	0x0
 #endif
@@ -118,29 +113,24 @@ typedef struct _ShinyNode* ShinyNodeCache;
 typedef struct _ShinyNode* ShinyNodeTable;
 #endif
 
+//======================================================================================================================
+
+# include <inttypes.h>
+
+
 #if PLATFORM_TYPE == PLATFORM_TYPE_WINDOWS
 
 // TODO: Fix this on windows, if needed.
 // TODO: Replace direct use of int32_t, uint32_t with shiny_int32_t etc.
 
 //if ( CYGWIN )
-//    set ( UINT32_T  "u_int32_t" )
 //    set ( UINT64_T  "u_int64_t" )
 //else ( CYGWIN )
-//    set ( INT32_T   "int"                 )
 //    set ( UINT32_T  "unsigned int"        )
-//    set ( INT64_T   "__int64"             )
 //    set ( UINT64_T  "unsigned __int64"    )
 //endif ( CYGWIN )
 
-///* Use the configured symbols in place of the standard ones, but set a
-// * typedef so we don't have to care
-// */
-//typedef INT32_T		int32_t;
 //typedef UINT32_T	uint32_t;
-//
-//typedef INT64_T		int64_t;
-//typedef UINT64_T	uint64_t;
 #endif
 
 typedef uint64_t			shinytick_t;
