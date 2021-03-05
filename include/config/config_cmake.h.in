@@ -2,24 +2,8 @@
 #define CONFIG_CMAKE_H
 
 /**
-*** Platform Checks
-**/
-
-/* Core platform type */
-#define PLATFORM_TYPE_WINDOWS	0x01
-#define PLATFORM_TYPE_POSIX 	0x02
-
-#cmakedefine PLATFORM_TYPE @PLATFORM_TYPE@
-
-
-/**
 *** Complier Checks
 **/
-
-/* Define the compiler specific prefix for function call protocol and library attributes */
-#cmakedefine SHINY_INLINE @SHINY_INLINE@
-#cmakedefine SHINY_UNUSED @SHINY_UNUSED@
-#cmakedefine SHINY_EXPORT @SHINY_EXPORT@
 
 /* Define the symbols used as the standard integer types */
 #cmakedefine INT32_T 	@INT32_T@

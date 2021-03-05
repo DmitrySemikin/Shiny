@@ -72,6 +72,31 @@
 /*																																					 */
 /*---------------------------------------------------------------------------*/
 
+#define PLATFORM_TYPE_WINDOWS	0x01
+#define PLATFORM_TYPE_POSIX 	0x02
+
+// TODO: Check do we really need it? Do we need to count MinGW and Cygwin as Windows or Posix?
+#if defined(_MSC_VER)
+    #define PLATFORM_TYPE PLATFORM_TYPE_WINDOWS
+#else
+    #define PLATFORM_TYPE PLATFORM_TYPE_POSIX
+#endif
+
+#if defined(_MSC_VER)
+    #define SHINY_INLINE inline
+    #define SHINY_UNUSED
+    // TODO: Don't we also need here "dllimport"?
+    #define SHINY_EXPORT __declspec(dllexport)
+#else
+    // assume GCC or Clang or something compatible
+    // TODO: "static" is not needed for older versions... but probably it does not harm
+    #define SHINY_INLINE static __inline__
+    #define SHINY_UNUSED __attribute__((unused))
+    // TODO: Do we really need dll export for GCC? For MinGW? Don't we also need "dllimport" then?
+    #define SHINY_EXPORT __attribute__((dllexport))
+#endif // _MSC_VER
+
+
 #if SHINY_STATIC_LINK == TRUE
 #	define SHINY_API
 #else

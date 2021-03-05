@@ -30,11 +30,6 @@ include ( cmake/extra/CheckPrototypeDefinition.cmake )
 ## Definition of the variables for config_cmake.h (generated from config_cmake.h.in)
 
 if ( MSVC OR MSVC_IDE OR MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR CMAKE_COMPILER_2005 OR MSVC90 OR MSVC10 )
-    # Define the export symbols
-    set ( SHINY_INLINE "inline" )
-    set ( SHINY_UNUSED " " )
-    set ( SHINY_EXPORT "__declspec(dllexport)" )
-
     # Define the standard integer types
     if ( CYGWIN )
         set ( UINT32_T  "u_int32_t" )
@@ -49,10 +44,7 @@ endif ( MSVC OR MSVC_IDE OR MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR CMAKE_COMPIL
 
 if ( ${CMAKE_COMPILER_IS_GNUCC} )
     message ( "-- Using GCC compiler profile...")
-
-    set ( SHINY_INLINE "static __inline__" )
-    set ( SHINY_UNUSED __attribute__\(\(unused\)\) )
-    set ( SHINY_EXPORT __attribute__\(\(dllexport\)\) )
+    # Nothing to do here for now
 endif ( ${CMAKE_COMPILER_IS_GNUCC} )
 
 # Check for CLang (this should be redundant eventually, as a patch
@@ -64,7 +56,7 @@ endif ( ${CMAKE_COMPILER_IS_GNUCC} )
 # away..
 if ( "${CMAKE_C_COMPILER_ID}" MATCHES "Clang" )
     message ( "-- Using Clang compiler profile...")
-
+    # Nothing to do here for now
 endif ( "${CMAKE_C_COMPILER_ID}" MATCHES "Clang" )
 
 
