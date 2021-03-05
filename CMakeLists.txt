@@ -5,7 +5,6 @@ cmake_minimum_required ( VERSION 2.8 )
 cmake_policy(SET CMP0048 NEW)
 cmake_policy(SET CMP0054 NEW)
 
-#=============================================================================
 
 
 project (
@@ -17,15 +16,8 @@ project (
 )
 
 
-#=============================================================================
 
 include ( CheckLibraryExists )
-
-#=============================================================================
-
-##
-## Library Configuration
-##
 
 # Look for the math library: on some platforms this is part of the C
 # library, on others it needs linking separately
@@ -39,9 +31,7 @@ if ( SEPARATE_LIB_M )
     set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -lm")
 endif( SEPARATE_LIB_M )
 
-##
-## C Library Sources
-##
+
 
 # Add the Shiny header files to the search path
 include_directories (include)

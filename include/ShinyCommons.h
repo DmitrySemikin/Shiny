@@ -7,6 +7,20 @@
 
 //======================================================================================================================
 
+#ifndef FALSE
+#define FALSE	0x0
+#endif
+
+#ifndef TRUE
+#define TRUE	0x1
+#endif
+
+#ifndef NULL
+#define NULL	0
+#endif
+
+//======================================================================================================================
+
 // TODO: What means "TRUE" and "FALSE" below???
 
 /** Use -DSHINY_IS_COMPILED=0 to compile out all shiny sources from your project. */
@@ -38,19 +52,6 @@
 #endif
 
 
-//======================================================================================================================
-
-#ifndef FALSE
-#define FALSE	0x0
-#endif
-
-#ifndef TRUE
-#define TRUE	0x1
-#endif
-
-#ifndef NULL
-#define NULL	0
-#endif
 
 /*---------------------------------------------------------------------------*/
 /*																																					 */
