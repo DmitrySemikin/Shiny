@@ -4,28 +4,9 @@
 #include "ShinyTools.h"
 
 
-// TODO: We want to get rid of config_cmake.h
-// I see two possibilities here:
-// - Either it should be possible to detect, which header to include based on some standard defines.
-// - or if not, then we need to take as default the most widespread one and make the other option be controlled
-//    by define, which needs to be setup at build time.
-//
-/* Work out where timeval lives - non windows */
-# ifdef TIME_IN_SYS_RESOURCE
-#  include <sys/resource.h>
-# endif
-# ifdef TIME_IN_SYS_TIME
-#  include <sys/time.h>
-# endif
-
-/* Work out where gettimeofday lives */
-# ifdef GETTIMEOFDAY_IN_SYS_TIME
-#  include <sys/time.h>
-# endif
-# ifdef GETTIMEOFDAY_IN_TIME
-#  include <time.h>
-# endif
-
+#if PLATFORM_TYPE == PLATFORM_TYPE_POSIX
+#include <sys/time.h>
+#endif /* PLATFORM_TYPE_POSIX */
 
 // TODO: Probably we need to include "profileapi.h" instead of windows.h
 #if PLATFORM_TYPE == PLATFORM_TYPE_WINDOWS
@@ -85,7 +66,7 @@ float ShinyGetTickInvFreq(void) {
     return invfreq;
 }
 
-#endif
+#endif /* PLATFORM_TYPE_WINDOWS */
 
 /*---------------------------------------------------------------------------*/
 
@@ -106,4 +87,4 @@ float ShinyGetTickInvFreq(void) {
     return 1.0f / 1000000.0f;
 }
 
-#endif
+#endif /* PLATFORM_TYPE_POSIX */

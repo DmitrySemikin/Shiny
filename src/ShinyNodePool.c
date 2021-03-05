@@ -2,7 +2,6 @@
 #include "ShinyCommons.h"
 
 #include "ShinyNodePool.h"
-#include "ShinyTools.h"
 
 #include <stdlib.h>
 #include <memory.h>

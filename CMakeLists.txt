@@ -84,35 +84,6 @@ if ( SEPARATE_LIB_M )
     set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -lm")
 endif( SEPARATE_LIB_M )
 
-# Work out where timeval lives
-set ( CMAKE_EXTRA_INCLUDE_FILES sys/resource.h )
-    check_type_size( "struct timeval" TIME_IN_SYS_RESOURCE )
-set ( CMAKE_EXTRA_INCLUDE_FILES )
-
-set ( CMAKE_EXTRA_INCLUDE_FILES sys/time.h )
-    check_type_size( "struct timeval" TIME_IN_SYS_TIME )
-set ( CMAKE_EXTRA_INCLUDE_FILES )
-
-# Work out where gettimeofday lives
-check_prototype_definition ( gettimeofday "int gettimeofday(struct timeval *restrict tp, void *restrict tzp)" "NULL" "sys/time.h" GETTIMEOFDAY_IN_SYS_TIME )
-check_prototype_definition ( gettimeofday "int gettimeofday(struct timeval *restrict tp, void *restrict tzp)" "NULL" "time.h" GETTIMEOFDAY_IN_TIME )
-
-##
-## Platform Configuration
-##
-
-# Look for the main platform types
-
-if ( UNIX )
-    set ( PLATFORM_TYPE 0x02 )
-    message ( "UNIX" )
-endif ( UNIX )
-
-if ( WIN32 )
-    set ( PLATFORM_TYPE 0x01 )
-endif ( WIN32 )
-
-
 ##
 ## Core Configuration File
 ##
