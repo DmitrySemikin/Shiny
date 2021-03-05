@@ -12,27 +12,6 @@
 #cmakedefine UINT64_T	@UINT64_T@
 
 /**
-*** Header Checks
-**/
-
-/* Look for assertions */
-#cmakedefine HAVE_ASSERT_H 1
-
-/* Look for the C99 declaration of the standard types */
-#cmakedefine HAVE_STDINT_H 1
-
-/* Look for the C99 integer types: needed for UUIDs amongst others */
-#cmakedefine HAVE_INTTYPES_H 1
-
-/* Look for the header files defining the constants for type lengths */
-#cmakedefine HAVE_VALUES_H 1
-#cmakedefine HAVE_FLOAT_H 1
-#cmakedefine HAVE_LIMITS_H 1
-
-/* Look for a separate malloc header */
-#cmakedefine EXPLICIT_MALLOC_H 1
-
-/**
 *** Function Checks
 **/
 

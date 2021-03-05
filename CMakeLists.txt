@@ -69,27 +69,6 @@ endif ( "${CMAKE_C_COMPILER_ID}" MATCHES "Clang" )
 
 
 ##
-## Header File Configuration
-##
-
-# Look for the "assert.h" header file
-check_include_files ( assert.h HAVE_ASSERT_H )
-
-# Look for the "inttypes.h" header file
-check_include_files ( inttypes.h HAVE_INTTYPES_H )
-
-# Look for the "stdint.h" header file
-check_include_files ( stdint.h HAVE_STDINT_H )
-
-# Look for the header files defining the constants for type lengths
-check_include_files ( values.h HAVE_VALUES_H )
-check_include_files ( float.h HAVE_FLOAT_H )
-check_include_files ( limits.h HAVE_LIMITS_H )
-
-# Look for a separate malloc header
-check_include_files ( malloc.h EXPLICIT_MALLOC_H )
-
-##
 ## Library Configuration
 ##
 
