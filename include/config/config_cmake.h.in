@@ -11,30 +11,6 @@
 
 #cmakedefine PLATFORM_TYPE @PLATFORM_TYPE@
 
-/* Bit Range and Endian checks
-**
-** Look for the machine type on Apple platforms at compile (not configure). Apple platforms
-** allow multiple architectures to exit simultaneously, so we can't check at configure
-**
-** See: http://www.cmake.org/pipermail/cmake/2009-June/030126.html
-**/
-
-#if defined(__APPLE__)
-#  if defined(__i386__)
-#    undef HAVE_64_BIT
-#  elif defined(__ppc__)
-#    undef HAVE_64_BIT
-#  elif defined(__x86_64__)
-#    define HAVE_64_BIT
-#  elif defined(__ppc64__)
-#    define HAVE_64_BIT
-#  else
-      // oops
-#    error "Unknown architecture!"
-#  endif
-#else
-#cmakedefine HAVE_64_BIT
-#endif
 
 /**
 *** Complier Checks

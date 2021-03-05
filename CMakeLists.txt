@@ -141,17 +141,6 @@ if ( WIN32 )
     set ( PLATFORM_TYPE 0x01 )
 endif ( WIN32 )
 
-# Check whether we are on a 32-bit or a 64-bit platform for non-Apple
-# platforms: Apple platforms have to be checked at compile time
-
-if ( NOT APPLE )
-    # check 64 bit
-    if ( CMAKE_SIZEOF_VOID_P EQUAL 4 )
-        set ( HAVE_64_BIT 0 )
-    else ( CMAKE_SIZEOF_VOID_P EQUAL 4 )
-        set ( HAVE_64_BIT 1 )
-    endif ( CMAKE_SIZEOF_VOID_P EQUAL 4 )
-endif ( NOT APPLE )
 
 ##
 ## Core Configuration File
