@@ -2,7 +2,7 @@
 #define SHINY_COMMONS_H
 
 
-// This file should be included into all Shiny sources and headers (except config_cmake.h) as a first line.
+// This file should be included into all Shiny sources and headers as a first line.
 
 
 //======================================================================================================================
@@ -36,15 +36,6 @@
 #ifndef SHINY_OUTPUT_MODE
 #define SHINY_OUTPUT_MODE		SHINY_OUTPUT_MODE_BOTH
 #endif
-
-
-//======================================================================================================================
-
-// TODO: Get rid of this one...
-
-/* Include the platform checks from CMake */
-#include "config/config_cmake.h"
-
 
 
 //======================================================================================================================
@@ -126,14 +117,28 @@ typedef struct _ShinyNode* ShinyNodeTable;
 #endif
 
 #if PLATFORM_TYPE == PLATFORM_TYPE_WINDOWS
-/* Use the configured symbols in place of the standard ones, but set a
- * typedef so we don't have to care
- */
-typedef INT32_T		int32_t;
-typedef UINT32_T	uint32_t;
 
-typedef INT64_T		int64_t;
-typedef UINT64_T	uint64_t;
+// TODO: Fix this on windows, if needed.
+// TODO: Replace direct use of int32_t, uint32_t with shiny_int32_t etc.
+
+//if ( CYGWIN )
+//    set ( UINT32_T  "u_int32_t" )
+//    set ( UINT64_T  "u_int64_t" )
+//else ( CYGWIN )
+//    set ( INT32_T   "int"                 )
+//    set ( UINT32_T  "unsigned int"        )
+//    set ( INT64_T   "__int64"             )
+//    set ( UINT64_T  "unsigned __int64"    )
+//endif ( CYGWIN )
+
+///* Use the configured symbols in place of the standard ones, but set a
+// * typedef so we don't have to care
+// */
+//typedef INT32_T		int32_t;
+//typedef UINT32_T	uint32_t;
+//
+//typedef INT64_T		int64_t;
+//typedef UINT64_T	uint64_t;
 #endif
 
 typedef uint64_t			shinytick_t;

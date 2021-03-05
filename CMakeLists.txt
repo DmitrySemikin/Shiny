@@ -20,53 +20,8 @@ project (
 #=============================================================================
 
 include ( CheckLibraryExists )
-include ( CheckIncludeFiles )
-include ( CheckTypeSize )
-include ( cmake/extra/CheckPrototypeDefinition.cmake )
-
 
 #=============================================================================
-
-## Definition of the variables for config_cmake.h (generated from config_cmake.h.in)
-
-if ( MSVC OR MSVC_IDE OR MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR CMAKE_COMPILER_2005 OR MSVC90 OR MSVC10 )
-    # Define the standard integer types
-    if ( CYGWIN )
-        set ( UINT32_T  "u_int32_t" )
-        set ( UINT64_T  "u_int64_t" )
-    else ( CYGWIN )
-        set ( INT32_T   "int"                 )
-        set ( UINT32_T  "unsigned int"        )
-        set ( INT64_T   "__int64"             )
-        set ( UINT64_T  "unsigned __int64"    )
-    endif ( CYGWIN )
-endif ( MSVC OR MSVC_IDE OR MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR CMAKE_COMPILER_2005 OR MSVC90 OR MSVC10 )
-
-if ( ${CMAKE_COMPILER_IS_GNUCC} )
-    message ( "-- Using GCC compiler profile...")
-    # Nothing to do here for now
-endif ( ${CMAKE_COMPILER_IS_GNUCC} )
-
-# Check for CLang (this should be redundant eventually, as a patch
-# has been made to the 2.8 branch. However, until that version becomes
-# common, this will do)
-#
-# NOTE: This MUST be done AFTER the GCC check, as Clang also shows up
-# as GCC. So test for that first, then Clang. One day this will all go
-# away..
-if ( "${CMAKE_C_COMPILER_ID}" MATCHES "Clang" )
-    message ( "-- Using Clang compiler profile...")
-    # Nothing to do here for now
-endif ( "${CMAKE_C_COMPILER_ID}" MATCHES "Clang" )
-
-
-#=============================================================================
-
-
-##
-## Project Configuration
-##
-
 
 ##
 ## Library Configuration
@@ -83,13 +38,6 @@ if ( SEPARATE_LIB_M )
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lm")
     set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -lm")
 endif( SEPARATE_LIB_M )
-
-##
-## Core Configuration File
-##
-
-# Set the global configure file
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/include/config/config_cmake.h.in ${CMAKE_CURRENT_SOURCE_DIR}/include/config/config_cmake.h)
 
 ##
 ## C Library Sources
