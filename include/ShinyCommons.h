@@ -100,6 +100,7 @@
 /*																																					 */
 /*---------------------------------------------------------------------------*/
 
+// TODO: This one should not be here. Move it to the appropriate location
 #if SHINY_IS_COMPILED == TRUE
 struct _ShinyNode;
 struct _ShinyZone;
@@ -111,6 +112,7 @@ struct _ShinyZone;
 /*																																					 */
 /*---------------------------------------------------------------------------*/
 
+// TODO: This one should not be here. Move it to the appropriate location
 #if SHINY_IS_COMPILED == TRUE
 typedef struct _ShinyNode* ShinyNodeCache;
 typedef struct _ShinyNode* ShinyNodeTable;
