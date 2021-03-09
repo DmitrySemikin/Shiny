@@ -36,11 +36,6 @@
 #define SHINY_LOOKUP_RATE   FALSE
 #endif
 
-/** if SHINY_HAS_ENABLED is defined to TRUE then Shiny can be enabled and disabled at runtime (but it has some overhead). */
-#ifndef SHINY_HAS_ENABLED
-#define SHINY_HAS_ENABLED   FALSE
-#endif
-
 #define SHINY_OUTPUT_MODE_FLAT  1
 #define SHINY_OUTPUT_MODE_TREE  2
 #define SHINY_OUTPUT_MODE_BOTH  3

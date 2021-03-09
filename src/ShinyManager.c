@@ -18,9 +18,6 @@
 /*---------------------------------------------------------------------------*/
 
 ShinyManager Shiny_instance = {
-#if SHINY_HAS_ENABLED == TRUE
-    /* enabled = */ false,
-#endif
     /* _lastTick = */ 0,
     /* _curNode = */ &Shiny_instance.rootNode,
     /* _tableMask = */ 0,
@@ -105,9 +102,6 @@ void ShinyManager_preLoad(ShinyManager *self) {
 /*---------------------------------------------------------------------------*/
 
 void ShinyManager_update(ShinyManager *self) {
-#if SHINY_HAS_ENABLED == TRUE
-    if (!enabled) return;
-#endif
 
     _ShinyManager_appendTicksToCurNode(self);
     ShinyZone_preUpdateChain(&self->rootZone);
@@ -127,9 +121,6 @@ void ShinyManager_update(ShinyManager *self) {
 /*---------------------------------------------------------------------------*/
 
 void ShinyManager_updateClean(ShinyManager *self) {
-#if SHINY_HAS_ENABLED == TRUE
-    if (!enabled) return;
-#endif
 
     _ShinyManager_appendTicksToCurNode(self);
     ShinyZone_preUpdateChain(&self->rootZone);

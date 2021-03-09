@@ -18,9 +18,6 @@
 /*---------------------------------------------------------------------------*/
 
 typedef struct {
-#if SHINY_HAS_ENABLED == TRUE
-    bool enabled;
-#endif
 
     shinytick_t _lastTick;
 
@@ -130,9 +127,6 @@ SHINY_INLINE void ShinyManager_beginNode(ShinyManager *self, ShinyNode* a_node) 
 }
 
 SHINY_INLINE void ShinyManager_lookupAndBeginNode(ShinyManager *self, ShinyNodeCache* a_cache, ShinyZone* a_zone) {
-#if SHINY_HAS_ENABLED == TRUE
-    if (!self->enabled) return;
-#endif
 
     if (self->_curNode != (*a_cache)->parent)
         *a_cache = _ShinyManager_lookupNode(self, a_cache, a_zone);
@@ -141,9 +135,6 @@ SHINY_INLINE void ShinyManager_lookupAndBeginNode(ShinyManager *self, ShinyNodeC
 }
 
 SHINY_INLINE void ShinyManager_endCurNode(ShinyManager *self) {
-#if SHINY_HAS_ENABLED == TRUE
-    if (!enabled) return;
-#endif
 
     _ShinyManager_appendTicksToCurNode(self);
     self->_curNode = self->_curNode->parent;

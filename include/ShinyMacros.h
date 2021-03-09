@@ -177,15 +177,6 @@
 
 
 /*---------------------------------------------------------------------------*/
-/* public preprocessors */
-
-#if SHINY_HAS_ENABLED == TRUE
-#define PROFILE_SET_ENABLED( boolean )										\
-    Shiny_instance.enabled = boolean
-#endif
-
-
-/*---------------------------------------------------------------------------*/
 /* internal preprocessors */
 
 #define _PROFILE_ID_ZONE( name )			__ShinyZone_##name
@@ -261,10 +252,6 @@ SHINY_INLINE ShinyData GetEmptyData() {
 #define PROFILE_SHARED_BLOCK(name)
 #define PROFILE_GET_SHARED_DATA(name)	ShinyGetEmptyData()
 #define PROFILE_GET_ROOT_DATA()			ShinyGetEmptyData()
-
-#if SHINY_HAS_ENABLED == TRUE
-#define PROFILE_SET_ENABLED(boolean)
-#endif
 
 #endif
 
