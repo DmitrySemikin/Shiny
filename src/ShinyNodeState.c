@@ -1,13 +1,13 @@
 // ShinyCommons.h must be included into all sources and headers as a first include
 #include "ShinyCommons.h"
 
+#if SHINY_IS_COMPILED
+
 #include <stdlib.h>
 
 #include "ShinyNodeState.h"
 #include "ShinyNode.h"
 #include "ShinyZone.h"
-
-#if SHINY_IS_COMPILED == TRUE
 
 /*---------------------------------------------------------------------------*/
 
@@ -27,9 +27,9 @@ ShinyNodeState* ShinyNodeState_push(ShinyNodeState *a_top, ShinyNode *a_node) {
     a_node->_last.selfTicks = 0;
     a_node->_last.entryCount = 0;
 
-    self->zoneUpdating = zone->_state != SHINY_ZONE_STATE_UPDATING;
+    self->zoneUpdating = zone->zoneState != SHINY_ZONE_STATE_UPDATING;
     if (self->zoneUpdating) {
-        zone->_state = SHINY_ZONE_STATE_UPDATING;
+        zone->zoneState = SHINY_ZONE_STATE_UPDATING;
     } else {
         zone->data.childTicks.cur -= a_node->data.selfTicks.cur;
     }
@@ -53,7 +53,7 @@ ShinyNode* ShinyNodeState_finishAndGetNext(ShinyNodeState *self, float a_damping
 
     if (self->zoneUpdating) {
         zone->data.childTicks.cur += node->data.childTicks.cur;
-        zone->_state = SHINY_ZONE_STATE_INITIALIZED;
+        zone->zoneState = SHINY_ZONE_STATE_INITIALIZED;
     }
 
     ShinyData_computeAverage(&node->data, a_damping);
@@ -73,7 +73,7 @@ ShinyNode* ShinyNodeState_finishAndGetNextClean(ShinyNodeState *self) {
 
     if (self->zoneUpdating) {
         zone->data.childTicks.cur += node->data.childTicks.cur;
-        zone->_state = SHINY_ZONE_STATE_INITIALIZED;
+        zone->zoneState = SHINY_ZONE_STATE_INITIALIZED;
     }
 
     ShinyData_copyAverage(&node->data);
@@ -84,4 +84,4 @@ ShinyNode* ShinyNodeState_finishAndGetNextClean(ShinyNodeState *self) {
     return node->nextSibling;
 }
 
-#endif
+#endif /* SHINY_IS_COMPILED */

@@ -1,9 +1,7 @@
 #ifndef SHINY_COMMONS_H
 #define SHINY_COMMONS_H
 
-
 /* This file should be included into all Shiny sources and headers as a first line. */
-
 
 /*====================================================================================================================*/
 
@@ -13,10 +11,6 @@
 
 #ifndef TRUE
 #define TRUE 1
-#endif
-
-#ifndef NULL
-#define NULL 0
 #endif
 
 /*====================================================================================================================*/

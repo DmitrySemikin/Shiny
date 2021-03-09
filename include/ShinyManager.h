@@ -1,8 +1,13 @@
 #ifndef SHINY_MANAGER_H
 #define SHINY_MANAGER_H
 
-// ShinyCommons.h must be included into all sources and headers as a first include
+/* ShinyCommons.h must be included into all sources and headers as a first include */
 #include "ShinyCommons.h"
+
+#if SHINY_IS_COMPILED
+
+
+#include <stdio.h>
 
 #include "ShinyZone.h"
 #include "ShinyNode.h"
@@ -10,22 +15,21 @@
 #include "ShinyTools.h"
 #include "ShinyOutput.h"
 
-#include <stdio.h>
 
-#if SHINY_IS_COMPILED == TRUE
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-
-/*---------------------------------------------------------------------------*/
 
 typedef struct {
 
     shinytick_t _lastTick;
 
-    ShinyNode* _curNode;
+    ShinyNode *_curNode;
 
     uint32_t _tableMask; /* = _tableSize - 1 */
 
-    ShinyNodeTable* _nodeTable;
+    ShinyNodeTable *_nodeTable;
 
 #if SHINY_LOOKUP_RATE == TRUE
     uint64_t _lookupCount;
@@ -37,10 +41,10 @@ typedef struct {
     uint32_t nodeCount;
     uint32_t zoneCount;
 
-    ShinyZone* _lastZone;
+    ShinyZone *_lastZone;
 
-    ShinyNodePool* _lastNodePool;
-    ShinyNodePool* _firstNodePool;
+    ShinyNodePool *_lastNodePool;
+    ShinyNodePool *_firstNodePool;
 
     ShinyNode rootNode;
     ShinyZone rootZone;
@@ -54,7 +58,7 @@ typedef struct {
 
 /*---------------------------------------------------------------------------*/
 
-extern ShinyNode* _ShinyManager_dummyNodeTable[];
+extern ShinyNode *_ShinyManager_dummyNodeTable[];
 
 extern ShinyManager Shiny_instance;
 
@@ -69,7 +73,7 @@ SHINY_INLINE void _ShinyManager_appendTicksToCurNode(ShinyManager *self) {
     self->_lastTick = curTick;
 }
 
-SHINY_API ShinyNode* _ShinyManager_lookupNode(ShinyManager *self, ShinyNodeCache* a_cache, ShinyZone* a_zone);
+SHINY_API ShinyNode *_ShinyManager_lookupNode(ShinyManager *self, ShinyNodeCache *a_cache, ShinyZone *a_zone);
 
 SHINY_API void _ShinyManager_createNodeTable(ShinyManager *self, uint32_t a_count);
 SHINY_API void _ShinyManager_resizeNodeTable(ShinyManager *self, uint32_t a_count);
@@ -77,8 +81,8 @@ SHINY_API void _ShinyManager_resizeNodeTable(ShinyManager *self, uint32_t a_coun
 SHINY_API void _ShinyManager_createNodePool(ShinyManager *self, uint32_t a_count);
 SHINY_API void _ShinyManager_resizeNodePool(ShinyManager *self, uint32_t a_count);
 
-SHINY_API ShinyNode* _ShinyManager_createNode(ShinyManager *self, ShinyNodeCache* a_cache, ShinyZone* a_pZone);
-SHINY_API void _ShinyManager_insertNode(ShinyManager *self, ShinyNode* a_pNode);
+SHINY_API ShinyNode *_ShinyManager_createNode(ShinyManager *self, ShinyNodeCache *a_cache, ShinyZone *a_pZone);
+SHINY_API void _ShinyManager_insertNode(ShinyManager *self, ShinyNode *a_pNode);
 
 SHINY_INLINE void _ShinyManager_init(ShinyManager *self) {
     self->_initialized = TRUE;
@@ -110,23 +114,23 @@ SHINY_INLINE float ShinyManager_lookupRate(const ShinyManager *self) { return -1
 SHINY_API void ShinyManager_resetZones(ShinyManager *self);
 SHINY_API void ShinyManager_destroyNodes(ShinyManager *self);
 
-SHINY_INLINE float ShinyManager_tableUsage(const ShinyManager *self)  {
+SHINY_INLINE float ShinyManager_tableUsage(const ShinyManager *self) {
     return ((float) self->nodeCount) / ((float) self->_tableSize);
 }
 
 SHINY_INLINE uint32_t ShinyManager_allocMemInBytes(const ShinyManager *self) {
-    return self->_tableSize * sizeof(ShinyNode*)
-         + (self->_firstNodePool)? ShinyNodePool_memoryUsageChain(self->_firstNodePool) : 0;
+    return self->_tableSize * sizeof(ShinyNode *)
+           + (self->_firstNodePool) ? ShinyNodePool_memoryUsageChain(self->_firstNodePool) : 0;
 }
 
-SHINY_INLINE void ShinyManager_beginNode(ShinyManager *self, ShinyNode* a_node) {
+SHINY_INLINE void ShinyManager_beginNode(ShinyManager *self, ShinyNode *a_node) {
     ShinyNode_beginEntry(a_node);
 
     _ShinyManager_appendTicksToCurNode(self);
     self->_curNode = a_node;
 }
 
-SHINY_INLINE void ShinyManager_lookupAndBeginNode(ShinyManager *self, ShinyNodeCache* a_cache, ShinyZone* a_zone) {
+SHINY_INLINE void ShinyManager_lookupAndBeginNode(ShinyManager *self, ShinyNodeCache *a_cache, ShinyZone *a_zone) {
 
     if (self->_curNode != (*a_cache)->parent)
         *a_cache = _ShinyManager_lookupNode(self, a_cache, a_zone);
@@ -155,13 +159,41 @@ SHINY_INLINE void ShinyManager_sortZones(ShinyManager *self) {
         self->_lastZone = ShinyZone_sortChain(&self->rootZone.next);
 }
 
-SHINY_API const char* ShinyManager_getOutputErrorString(ShinyManager *self);
+SHINY_API const char *ShinyManager_getOutputErrorString(ShinyManager *self);
 
 SHINY_API int ShinyManager_output(ShinyManager *self, const char *a_filename);
 SHINY_API void ShinyManager_outputToStream(ShinyManager *self, FILE *stream);
 
+
+SHINY_INLINE int ShinyManager_isZoneSelfTimeBelow(ShinyManager *self, ShinyZone* a_zone, float a_percentage) {
+    return a_percentage * (float) self->rootZone.data.childTicks.cur
+           <= (float) a_zone->data.selfTicks.cur;
+}
+
+SHINY_INLINE int ShinyManager_isZoneTotalTimeBelow(ShinyManager *self, ShinyZone* a_zone, float a_percentage) {
+    return a_percentage * (float) self->rootZone.data.childTicks.cur
+           <= (float) ShinyData_totalTicksCur(&a_zone->data);
+}
+
+/**/
+
+SHINY_INLINE void ShinyManager_enumerateNodes(ShinyManager *self, void (*a_func)(const ShinyNode*)) {
+    ShinyNode_enumerateNodes(&self->rootNode, a_func);
+}
+
+SHINY_INLINE void ShinyManager_enumerateZones(ShinyManager *self, void (*a_func)(const ShinyZone*)) {
+    ShinyZone_enumerateZones(&self->rootZone, a_func);
+}
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
+
+
+
+/* C++ API */
+
 #if __cplusplus
-} /* end of extern "C" */
 
 SHINY_INLINE std::string ShinyManager_outputTreeToString(ShinyManager *self) {
     const char* error = ShinyManager_getOutputErrorString(self);
@@ -177,32 +209,6 @@ SHINY_INLINE std::string ShinyManager_outputFlatToString(ShinyManager *self) {
     return ShinyZonesToString(&self->rootZone, self->zoneCount);
 }
 
-extern "C" { /* end of c++ */
-#endif
-
-SHINY_INLINE int ShinyManager_isZoneSelfTimeBelow(ShinyManager *self, ShinyZone* a_zone, float a_percentage) {
-    return a_percentage * (float) self->rootZone.data.childTicks.cur
-        <= (float) a_zone->data.selfTicks.cur;
-}
-
-SHINY_INLINE int ShinyManager_isZoneTotalTimeBelow(ShinyManager *self, ShinyZone* a_zone, float a_percentage) {
-    return a_percentage * (float) self->rootZone.data.childTicks.cur
-        <= (float) ShinyData_totalTicksCur(&a_zone->data);
-}
-
-/**/
-
-SHINY_INLINE void ShinyManager_enumerateNodes(ShinyManager *self, void (*a_func)(const ShinyNode*)) {
-    ShinyNode_enumerateNodes(&self->rootNode, a_func);
-}
-
-SHINY_INLINE void ShinyManager_enumerateZones(ShinyManager *self, void (*a_func)(const ShinyZone*)) {
-    ShinyZone_enumerateZones(&self->rootZone, a_func);
-}
-
-#if __cplusplus
-} /* end of extern "C" */
-
 template <class T> void ShinyManager_enumerateNodes(ShinyManager *self, T* a_this, void (T::*a_func)(const ShinyNode*)) {
     ShinyNode_enumerateNodes(&self->rootNode, a_this, a_func);
 }
@@ -210,15 +216,6 @@ template <class T> void ShinyManager_enumerateNodes(ShinyManager *self, T* a_thi
 template <class T> void ShinyManager_enumerateZones(ShinyManager *self, T* a_this, void (T::*a_func)(const ShinyZone*)) {
     ShinyZone_enumerateZones(&self->rootZone, a_this, a_func);
 }
-
-extern "C" { /* end of c++ */
-#endif
-
-
-/*---------------------------------------------------------------------------*/
-
-#if __cplusplus
-} /* end of extern "C" */
 
 class ShinyEndNodeOnDestruction {
 public:
@@ -228,10 +225,9 @@ public:
     }
 };
 
-extern "C" { /* end of c++ */
-#endif
+#endif /* __cplusplus */
 
 
-#endif /* if SHINY_IS_COMPILED == TRUE */
+#endif /* SHINY_IS_COMPILED */
 
 #endif /* SHINY_MANAGER_H */

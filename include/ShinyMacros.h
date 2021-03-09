@@ -1,12 +1,13 @@
 #ifndef SHINY_MACROS_H
 #define SHINY_MACROS_H
 
-// ShinyCommons.h must be included into all sources and headers as a first include
+/* ShinyCommons.h must be included into all sources and headers as a first include */
 #include "ShinyCommons.h"
 
-#include "ShinyManager.h"
+#if SHINY_IS_COMPILED
 
-#if SHINY_IS_COMPILED == TRUE
+
+#include "ShinyManager.h"
 
 
 /*---------------------------------------------------------------------------*/
@@ -225,7 +226,9 @@
 
 /*---------------------------------------------------------------------------*/
 
-#else /* #if SHINY_IS_COMPILED == TRUE */
+
+#else /* SHINY_IS_COMPILED */
+
 
 SHINY_INLINE ShinyData GetEmptyData() {
     ShinyData a = { { 0, 0 }, { 0, 0 }, { 0, 0 } };
@@ -253,6 +256,8 @@ SHINY_INLINE ShinyData GetEmptyData() {
 #define PROFILE_GET_SHARED_DATA(name)	ShinyGetEmptyData()
 #define PROFILE_GET_ROOT_DATA()			ShinyGetEmptyData()
 
-#endif
+
+#endif /* SHINY_IS_COMPILED */
+
 
 #endif /* SHINY_MACROS_H */

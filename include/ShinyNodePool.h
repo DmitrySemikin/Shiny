@@ -1,20 +1,23 @@
 #ifndef SHINY_NODE_POOL_H
 #define SHINY_NODE_POOL_H
 
-// ShinyCommons.h must be included into all sources and headers as a first include
+/* ShinyCommons.h must be included into all sources and headers as a first include */
 #include "ShinyCommons.h"
+
+#if SHINY_IS_COMPILED
 
 
 #include "ShinyNode.h"
 
-#if SHINY_IS_COMPILED == TRUE
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-/*---------------------------------------------------------------------------*/
 
 typedef struct _ShinyNodePool {
 
-    struct _ShinyNodePool* nextPool;
+    struct _ShinyNodePool *nextPool;
 
     ShinyNode *_nextItem;
     ShinyNode *endOfItems;
@@ -24,22 +27,26 @@ typedef struct _ShinyNodePool {
 } ShinyNodePool;
 
 
-/*---------------------------------------------------------------------------*/
 
-SHINY_INLINE ShinyNode* ShinyNodePool_firstItem(ShinyNodePool *self) {
+SHINY_INLINE ShinyNode *ShinyNodePool_firstItem(ShinyNodePool *self) {
     return &(self->_items[0]);
 }
 
-SHINY_INLINE ShinyNode* ShinyNodePool_newItem(ShinyNodePool *self) {
+SHINY_INLINE ShinyNode *ShinyNodePool_newItem(ShinyNodePool *self) {
     return self->_nextItem++;
 }
 
-ShinyNodePool* ShinyNodePool_create(uint32_t a_items);
+ShinyNodePool *ShinyNodePool_create(uint32_t a_items);
 void ShinyNodePool_destroy(ShinyNodePool *self);
 
 uint32_t ShinyNodePool_memoryUsageChain(ShinyNodePool *first);
 
 
-#endif /* if SHINY_IS_COMPILED == TRUE */
+#ifdef __cplusplus
+} // extern "C"
+#endif
+
+
+#endif /* SHINY_IS_COMPILED */
 
 #endif /* SHINY_NODE_POOL_H */

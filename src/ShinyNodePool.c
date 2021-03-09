@@ -1,12 +1,14 @@
 // ShinyCommons.h must be included into all sources and headers as a first include
 #include "ShinyCommons.h"
 
+#if SHINY_IS_COMPILED
+
+
 #include "ShinyNodePool.h"
 
 #include <stdlib.h>
 #include <memory.h>
 
-#if SHINY_IS_COMPILED == TRUE
 
 
 /*---------------------------------------------------------------------------*/
@@ -53,4 +55,4 @@ void ShinyNodePool_destroy(ShinyNodePool *self) {
     free(self);
 }
 
-#endif
+#endif /* SHINY_IS_COMPILED */

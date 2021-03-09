@@ -1,11 +1,13 @@
 // ShinyCommons.h must be included into all sources and headers as a first include
 #include "ShinyCommons.h"
 
-#include "ShinyZone.h"
+#if SHINY_IS_COMPILED
+
 
 #include <memory.h>
 
-#if SHINY_IS_COMPILED == TRUE
+#include "ShinyZone.h"
+
 
 /*---------------------------------------------------------------------------*/
 
@@ -49,7 +51,7 @@ void ShinyZone_resetChain(ShinyZone *first) {
     ShinyZone* zone = first, *temp;
 
     do {
-        zone->_state = SHINY_ZONE_STATE_HIDDEN;
+        zone->zoneState = SHINY_ZONE_STATE_HIDDEN;
         temp = zone->next;
         zone->next = NULL;
         zone = temp;
@@ -177,4 +179,4 @@ void ShinyZone_enumerateZones(const ShinyZone* a_zone, void (*a_func)(const Shin
     if (a_zone->next) ShinyZone_enumerateZones(a_zone->next, a_func);
 }
 
-#endif
+#endif /* SHINY_IS_COMPILED */

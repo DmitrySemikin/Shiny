@@ -1,6 +1,9 @@
 // ShinyCommons.h must be included into all sources and headers as a first include
 #include "ShinyCommons.h"
 
+#if SHINY_IS_COMPILED
+
+
 #include "ShinyOutput.h"
 
 #include <stdio.h>
@@ -14,7 +17,6 @@
 #   define TRAILING		1
 #endif
 
-#if SHINY_IS_COMPILED == TRUE
 
 
 /*---------------------------------------------------------------------------*/
@@ -166,4 +168,4 @@ void ShinyPrintZones(char* output, const ShinyZone *a_root) {
     }
 }
 
-#endif
+#endif /* SHINY_IS_COMPILED */

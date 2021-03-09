@@ -1,42 +1,42 @@
 #ifndef SHINY_ZONE_H
 #define SHINY_ZONE_H
 
-// ShinyCommons.h must be included into all sources and headers as a first include
+/* ShinyCommons.h must be included into all sources and headers as a first include */
 #include "ShinyCommons.h"
 
+#if SHINY_IS_COMPILED
+
+
+#include <memory.h>
+#include <stddef.h>
 
 #include "ShinyData.h"
-#include <memory.h>
-
-#if SHINY_IS_COMPILED == TRUE
 
 
-/*---------------------------------------------------------------------------*/
-
-#define SHINY_ZONE_STATE_HIDDEN			0
-#define SHINY_ZONE_STATE_INITIALIZED	1
-#define SHINY_ZONE_STATE_UPDATING		2
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 
-/*---------------------------------------------------------------------------*/
+#define SHINY_ZONE_STATE_HIDDEN         0
+#define SHINY_ZONE_STATE_INITIALIZED    1
+#define SHINY_ZONE_STATE_UPDATING       2
 
 typedef struct _ShinyZone {
-    struct _ShinyZone* next;
-    int _state;
-    const char* name;
-    ShinyData data;
+    struct _ShinyZone * next;
+    int                 zoneState;
+    const char *        name;
+    ShinyData           data;
 } ShinyZone;
 
 
-/*---------------------------------------------------------------------------*/
-
-SHINY_INLINE void ShinyZone_init(ShinyZone *self, ShinyZone* a_prev) {
-    self->_state = SHINY_ZONE_STATE_INITIALIZED;
+SHINY_INLINE void ShinyZone_init(ShinyZone * self, ShinyZone * a_prev) {
+    self->zoneState = SHINY_ZONE_STATE_INITIALIZED;
     a_prev->next = self;
 }
 
 SHINY_INLINE void ShinyZone_uninit(ShinyZone *self) {
-    self->_state = SHINY_ZONE_STATE_HIDDEN;
+    self->zoneState = SHINY_ZONE_STATE_HIDDEN;
     self->next = NULL;
 }
 
@@ -56,9 +56,15 @@ SHINY_API void ShinyZone_clear(ShinyZone* self);
 
 SHINY_API void ShinyZone_enumerateZones(const ShinyZone* a_zone, void (*a_func)(const ShinyZone*));
 
-#if __cplusplus
-} /* end of extern "C" */
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
+
+
+/* C++ API */
+
+#ifdef __cplusplus
 template <class T>
 void ShinyZone_enumerateZones(const ShinyZone* a_zone, T* a_this, void (T::*a_func)(const ShinyZone*)) {
     (a_this->*a_func)(a_zone);
@@ -66,10 +72,9 @@ void ShinyZone_enumerateZones(const ShinyZone* a_zone, T* a_this, void (T::*a_fu
     if (a_zone->next) ShinyZone_enumerateZones(a_zone->next, a_this, a_func);
 }
 
-// TODO: Fix this
-extern "C" { /* end of c++ */
-#endif
+#endif // __cplusplus
 
-#endif /* if SHINY_IS_COMPILED == TRUE */
+
+#endif /* SHINY_IS_COMPILED */
 
 #endif /* SHINY_ZONE_H */

@@ -1,14 +1,15 @@
 // ShinyCommons.h must be included into all sources and headers as a first include
 #include "ShinyCommons.h"
 
+#if SHINY_IS_COMPILED
+
+
 #include "ShinyManager.h"
 
 #include <memory.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#if SHINY_IS_COMPILED == TRUE
 
 
 /*---------------------------------------------------------------------------*/
@@ -46,7 +47,7 @@ ShinyManager Shiny_instance = {
     },
     /* rootZone = */ {
         /* next = */ NULL,
-        /* _state = */ SHINY_ZONE_STATE_HIDDEN,
+        /* zoneState = */ SHINY_ZONE_STATE_HIDDEN,
         /* name = */ "<unprofiled>",
         /* data = */ { { 0, 0 }, { 0, 0 }, { 0, 0 } }
     },
@@ -181,7 +182,7 @@ ShinyNode* _ShinyManager_lookupNode(ShinyManager *self, ShinyNodeCache *a_cache,
         /* loop is guaranteed to end because the hash table is never full */
     }
 
-    if (a_zone->_state == SHINY_ZONE_STATE_HIDDEN) { /* zone is not initialized */
+    if (a_zone->zoneState == SHINY_ZONE_STATE_HIDDEN) { /* zone is not initialized */
         ShinyZone_init(a_zone, self->_lastZone);
 
         self->_lastZone = a_zone;
@@ -412,4 +413,4 @@ void ShinyManager_outputToStream(ShinyManager *self, FILE *a_stream) {
 #endif
 }
 
-#endif /* if SHINY_IS_COMPILED == TRUE */
+#endif /* SHINY_IS_COMPILED */

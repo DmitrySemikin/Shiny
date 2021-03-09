@@ -1,6 +1,9 @@
 // ShinyCommons.h must be included into all sources and headers as a first include
 #include "ShinyCommons.h"
 
+#if SHINY_IS_COMPILED
+
+
 #include "ShinyTools.h"
 
 
@@ -88,3 +91,6 @@ float ShinyGetTickInvFreq(void) {
 }
 
 #endif /* PLATFORM_TYPE_POSIX */
+
+
+#endif /* SHINY_IS_COMPILED */

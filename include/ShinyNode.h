@@ -1,33 +1,35 @@
 #ifndef SHINY_NODE_H
 #define SHINY_NODE_H
 
-// ShinyCommons.h must be included into all sources and headers as a first include
+/* ShinyCommons.h must be included into all sources and headers as a first include */
 #include "ShinyCommons.h"
+
+#if SHINY_IS_COMPILED
 
 
 #include "ShinyData.h"
 #include "ShinyTools.h"
 
-#if SHINY_IS_COMPILED == TRUE
 
-
-/*---------------------------------------------------------------------------*/
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct _ShinyNode {
 
     ShinyLastData _last;
 
-    struct _ShinyZone* zone;
-    struct _ShinyNode* parent;
-    struct _ShinyNode* nextSibling;
+    struct _ShinyZone * zone;
+    struct _ShinyNode * parent;
+    struct _ShinyNode * nextSibling;
 
-    struct _ShinyNode* firstChild;
-    struct _ShinyNode* lastChild;
+    struct _ShinyNode * firstChild;
+    struct _ShinyNode * lastChild;
 
     uint32_t childCount;
     uint32_t entryLevel;
 
-    ShinyNodeCache* _cache;
+    ShinyNodeCache * _cache;
 
     ShinyData data;
 
@@ -97,8 +99,14 @@ SHINY_API void ShinyNode_clear(ShinyNode* self);
 
 SHINY_API void ShinyNode_enumerateNodes(const ShinyNode* a_node, void (*a_func)(const ShinyNode*));
 
-#if __cplusplus
+#ifdef __cplusplus
 } /* end of extern "C" */
+#endif
+
+
+
+/* C++ API */
+#ifdef __cplusplus
 
 template <class T>
 void ShinyNode_enumerateNodes(const ShinyNode* a_node, T* a_this, void (T::*a_func)(const ShinyNode*)) {
@@ -108,10 +116,10 @@ void ShinyNode_enumerateNodes(const ShinyNode* a_node, T* a_this, void (T::*a_fu
     if (a_node->nextSibling) ShinyNode_enumerateNodes(a_node->nextSibling, a_this, a_func);
 }
 
-// TODO: Fix this
-extern "C" { /* end of c++ */
-#endif
+#endif /* __cplusplus */
 
-#endif /* if SHINY_IS_COMPILED == TRUE */
+
+
+#endif /* SHINY_IS_COMPILED */
 
 #endif /* SHINY_NODE_H */

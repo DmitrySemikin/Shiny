@@ -1,6 +1,8 @@
 // ShinyCommons.h must be included into all sources and headers as a first include
 #include "ShinyCommons.h"
 
+#if SHINY_IS_COMPILED
+
 #include "ShinyNode.h"
 #include "ShinyZone.h"
 #include "ShinyNodeState.h"
@@ -8,7 +10,6 @@
 #include <memory.h>
 
 
-#if SHINY_IS_COMPILED == TRUE
 
 /*---------------------------------------------------------------------------*/
 
@@ -106,4 +107,4 @@ void ShinyNode_enumerateNodes(const ShinyNode* a_node, void (*a_func)(const Shin
     if (a_node->nextSibling) ShinyNode_enumerateNodes(a_node->nextSibling, a_func);
 }
 
-#endif
+#endif /* SHINY_IS_COMPILED */

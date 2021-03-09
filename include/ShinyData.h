@@ -1,10 +1,15 @@
 #ifndef SHINY_DATA_H
 #define SHINY_DATA_H
 
-// ShinyCommons.h must be included into all sources and headers as a first include
+/* ShinyCommons.h must be included into all sources and headers as a first include */
 #include "ShinyCommons.h"
 
-/*---------------------------------------------------------------------------*/
+#if SHINY_IS_COMPILED
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct {
     uint32_t entryCount;
@@ -12,23 +17,24 @@ typedef struct {
 } ShinyLastData;
 
 
-/*---------------------------------------------------------------------------*/
-
 typedef struct {
     shinytick_t cur;
     float avg;
 } ShinyTickData;
+
 
 typedef struct {
     uint32_t cur;
     float avg;
 } ShinyCountData;
 
+
 typedef struct {
     ShinyCountData entryCount;
     ShinyTickData selfTicks;
     ShinyTickData childTicks;
 } ShinyData;
+
 
 SHINY_INLINE shinytick_t ShinyData_totalTicksCur(const ShinyData *self) {
     return self->selfTicks.cur + self->childTicks.cur;
@@ -39,12 +45,9 @@ SHINY_INLINE float ShinyData_totalTicksAvg(const ShinyData *self) {
 }
 
 SHINY_INLINE void ShinyData_computeAverage(ShinyData *self, float a_damping) {
-    self->entryCount.avg = self->entryCount.cur +
-        a_damping * (self->entryCount.avg - self->entryCount.cur);
-    self->selfTicks.avg = self->selfTicks.cur +
-        a_damping * (self->selfTicks.avg - self->selfTicks.cur);
-    self->childTicks.avg = self->childTicks.cur +
-        a_damping * (self->childTicks.avg - self->childTicks.cur);
+    self->entryCount.avg = self->entryCount.cur + a_damping * (self->entryCount.avg - self->entryCount.cur);
+    self->selfTicks.avg = self->selfTicks.cur + a_damping * (self->selfTicks.avg - self->selfTicks.cur);
+    self->childTicks.avg = self->childTicks.cur + a_damping * (self->childTicks.avg - self->childTicks.cur);
 }
 
 SHINY_INLINE void ShinyData_copyAverage(ShinyData *self) {
@@ -67,5 +70,13 @@ SHINY_INLINE void ShinyData_clearCurrent(ShinyData *self) {
     self->selfTicks.cur = 0;
     self->childTicks.cur = 0;
 }
+
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
+
+
+#endif /* SHINY_IS_COMPILED */
 
 #endif /* SHINY_DATA_H */
