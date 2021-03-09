@@ -37,7 +37,8 @@ SHINY_INLINE void ShinyZone_init(ShinyZone * self, ShinyZone * a_prev) {
     a_prev->next = self;
 }
 
-SHINY_INLINE void ShinyZone_uninit(ShinyZone *self) {
+/* TODO: Seems to be unused. If true, remove it. */
+SHINY_INLINE void ShinyZone_uninit(ShinyZone * self) {
     self->zoneState = SHINY_ZONE_STATE_HIDDEN;
     self->next = NULL;
 }
