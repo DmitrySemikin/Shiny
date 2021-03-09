@@ -4,9 +4,14 @@
 #if SHINY_IS_COMPILED
 
 
+#ifdef __cplusplus
+    #include <cstdio>
+#else
+    #include <stdio.h>
+#endif
+
 #include "ShinyOutput.h"
 
-#include <stdio.h>
 
 #if SHINY_COMPILER == SHINY_COMPILER_MSVC
 #   pragma warning(disable: 4996)

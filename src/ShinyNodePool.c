@@ -4,11 +4,16 @@
 #if SHINY_IS_COMPILED
 
 
-#include "ShinyNodePool.h"
-
+#ifdef __cplusplus
+#include <cstdlib>
+    #include <cstring>
+#else
 #include <stdlib.h>
-#include <memory.h>
+#include <string.h>
+#endif
 
+
+#include "ShinyNodePool.h"
 
 
 /*---------------------------------------------------------------------------*/

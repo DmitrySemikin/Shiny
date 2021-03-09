@@ -6,9 +6,11 @@
 
 #if SHINY_IS_COMPILED
 
-
-#include <memory.h>
-#include <stddef.h>
+#ifdef __cplusplus
+    #include <cstddef>
+#else
+    #include <stddef.h>
+#endif
 
 #include "ShinyData.h"
 

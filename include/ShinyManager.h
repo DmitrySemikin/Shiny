@@ -7,7 +7,12 @@
 #if SHINY_IS_COMPILED
 
 
-#include <stdio.h>
+#ifdef __cplusplus
+    #include <cstdio>
+#else
+    #include <stdio.h>
+#endif
+
 
 #include "ShinyZone.h"
 #include "ShinyNode.h"

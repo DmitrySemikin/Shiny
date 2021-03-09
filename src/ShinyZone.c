@@ -4,7 +4,12 @@
 #if SHINY_IS_COMPILED
 
 
-#include <memory.h>
+#ifdef __cplusplus
+    #include <cstring>
+#else
+    #include <string.h>
+#endif
+
 
 #include "ShinyZone.h"
 

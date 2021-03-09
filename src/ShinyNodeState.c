@@ -3,7 +3,13 @@
 
 #if SHINY_IS_COMPILED
 
-#include <stdlib.h>
+
+#ifdef __cplusplus
+    #include <cstdlib>
+#else
+    #include <stdlib.h>
+#endif
+
 
 #include "ShinyNodeState.h"
 #include "ShinyNode.h"

@@ -3,11 +3,15 @@
 
 #if SHINY_IS_COMPILED
 
+#ifdef __cplusplus
+    #include <cstring>
+#else
+    #include <string.h>
+#endif
+
 #include "ShinyNode.h"
 #include "ShinyZone.h"
 #include "ShinyNodeState.h"
-
-#include <memory.h>
 
 
 

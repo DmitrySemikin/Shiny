@@ -6,10 +6,15 @@
 
 #include "ShinyManager.h"
 
-#include <memory.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
+#ifdef __cplusplus
+    #include <cstring>
+    #include <cstdio>
+    #include <cstdlib>
+#else
+    #include <string.h>
+    #include <stdio.h>
+    #include <stdlib.h>
+#endif
 
 
 /*---------------------------------------------------------------------------*/
