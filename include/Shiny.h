@@ -8,7 +8,6 @@
 
 
 #include "ShinyMacros.h"
-#include "ShinyManager.h"
 
 
 #endif /* SHINY_IS_COMPILED */
