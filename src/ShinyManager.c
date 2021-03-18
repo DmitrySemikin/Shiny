@@ -156,10 +156,14 @@ void ShinyManager_destroy(ShinyManager *self) {
 
 /*---------------------------------------------------------------------------*/
 
-ShinyNode* _ShinyManager_lookupNode(ShinyManager *self, ShinyNodeCache *a_cache, ShinyZone *a_zone) {
+ShinyNode * _ShinyManager_lookupNode(
+    ShinyManager *   self,
+    ShinyNodeCache * a_cache,
+    ShinyZone *      a_zone
+) {
     uint32_t nHash = hash_value(self->_curNode, a_zone);
     uint32_t nIndex = nHash & self->_tableMask;
-    ShinyNode* pNode = self->_nodeTable[nIndex];
+    ShinyNode * pNode = self->_nodeTable[nIndex];
 
     _ShinyManager_incLookup(self);
     _ShinyManager_incLookupSuccess(self);
@@ -167,7 +171,9 @@ ShinyNode* _ShinyManager_lookupNode(ShinyManager *self, ShinyNodeCache *a_cache,
     if (pNode) {
         uint32_t nStep;
 
-        if (ShinyNode_isEqual(pNode, self->_curNode, a_zone)) return pNode; /* found it! */
+        if (ShinyNode_isEqual(pNode, self->_curNode, a_zone)) {
+            return pNode; /* found it! */
+        }
 
         /* hash collision: */
 
@@ -180,8 +186,11 @@ ShinyNode* _ShinyManager_lookupNode(ShinyManager *self, ShinyNodeCache *a_cache,
             nIndex = (nIndex + nStep) & self->_tableMask;
             pNode = self->_nodeTable[nIndex];
 
-            if (!pNode) break; /* found empty slot */
-            else if (ShinyNode_isEqual(pNode, self->_curNode, a_zone)) return pNode; /* found it! */
+            if (!pNode) {
+                break; /* found empty slot */
+            } else if (ShinyNode_isEqual(pNode, self->_curNode, a_zone)) {
+                return pNode; /* found it! */
+            }
         }
 
         /* loop is guaranteed to end because the hash table is never full */
