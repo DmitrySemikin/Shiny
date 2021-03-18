@@ -297,7 +297,7 @@ void _ShinyManager_createNodeTable(ShinyManager *self, uint32_t a_nCount) {
     self->_tableMask = a_nCount - 1;
 
     self->_nodeTable = (ShinyNodeTable*)
-        malloc(sizeof(ShinyNode) * a_nCount);
+        malloc(sizeof(ShinyNode*) * a_nCount);
 
     memset(self->_nodeTable, 0, a_nCount * sizeof(ShinyNode*));
 }
