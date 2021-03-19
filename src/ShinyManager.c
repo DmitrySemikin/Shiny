@@ -305,21 +305,23 @@ void _ShinyManager_createNodeTable(ShinyManager * self, uint32_t tableSize) {
 
 /*---------------------------------------------------------------------------*/
 
-void _ShinyManager_resizeNodeTable(ShinyManager *self, uint32_t a_nCount) {
-    ShinyNodePool* pPool;
+void _ShinyManager_resizeNodeTable(ShinyManager *self, uint32_t newTableSize) {
+
+    ShinyNodePool * currentNodePool;
 
     free(self->_nodeTable);
-    _ShinyManager_createNodeTable(self, a_nCount);
+    _ShinyManager_createNodeTable(self, newTableSize);
 
-    pPool = self->_firstNodePool;
-    while (pPool) {
+    currentNodePool = self->_firstNodePool;
+    while (currentNodePool) {
 
-        ShinyNode *pIter = ShinyNodePool_firstItem(pPool);
+        ShinyNode * currentNode = ShinyNodePool_firstItem(currentNodePool);
 
-        while (pIter != pPool->_nextItem)
-            _ShinyManager_insertNode(self, pIter++);
+        while (currentNode != currentNodePool->_nextItem) {
+            _ShinyManager_insertNode(self, currentNode++);
+        }
 
-        pPool = pPool->nextPool;
+        currentNodePool = currentNodePool->nextPool;
     }
 }
 
