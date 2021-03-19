@@ -63,8 +63,14 @@ typedef struct {
 
 /*---------------------------------------------------------------------------*/
 
-extern ShinyNode *_ShinyManager_dummyNodeTable[];
+/**
+ * Used as initial value of _nodeTable of global ShinyManager instance.
+ * By checking the equality one can see, if ShinyManager was initialized.
+ */
+extern ShinyNode * _ShinyManager_dummyNodeTable[];
 
+
+/** Global `ShinyManager` object, which manages everything else. */
 extern ShinyManager Shiny_instance;
 
 
@@ -83,8 +89,14 @@ SHINY_API ShinyNode *_ShinyManager_lookupNode(ShinyManager *self, ShinyNodeCache
 SHINY_API void _ShinyManager_createNodeTable(ShinyManager *self, uint32_t a_count);
 SHINY_API void _ShinyManager_resizeNodeTable(ShinyManager *self, uint32_t a_count);
 
+
+/** Create first node pool. Should only be called once on initialization. */
 SHINY_API void _ShinyManager_createNodePool(ShinyManager *self, uint32_t a_count);
-SHINY_API void _ShinyManager_resizeNodePool(ShinyManager *self, uint32_t a_count);
+
+/* TODO: Rename this. */
+/** Create additional node pool of size `additionalPoolCapacity`. */
+SHINY_API void _ShinyManager_resizeNodePool(ShinyManager * self, uint32_t additionalPoolCapacity);
+
 
 SHINY_API ShinyNode *_ShinyManager_createNode(ShinyManager *self, ShinyNodeCache *a_cache, ShinyZone *a_pZone);
 SHINY_API void _ShinyManager_insertNode(ShinyManager *self, ShinyNode *a_pNode);
@@ -105,11 +117,11 @@ SHINY_INLINE void _ShinyManager_uninit(ShinyManager *self) {
     self->rootNode.zone = &self->rootZone;
 }
 
+/* TODO: Move private functions to the .c file. */
 #if SHINY_LOOKUP_RATE == TRUE
 SHINY_INLINE void _ShinyManager_incLookup(ShinyManager *self) { self->_lookupCount++; }
 SHINY_INLINE void _ShinyManager_incLookupSuccess(ShinyManager *self) { self->_lookupSuccessCount++; }
 SHINY_INLINE float ShinyManager_lookupRate(const ShinyManager *self) { return ((float) self->_lookupSuccessCount) / ((float) self->_lookupCount); }
-
 #else
 SHINY_INLINE void _ShinyManager_incLookup(ShinyManager *self) {}
 SHINY_INLINE void _ShinyManager_incLookupSuccess(ShinyManager *self) {}

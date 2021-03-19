@@ -61,7 +61,7 @@ ShinyManager Shiny_instance = {
     /* _firstUpdate = */ TRUE
 };
 
-ShinyNode* _ShinyManager_dummyNodeTable[] = { NULL };
+ShinyNode * _ShinyManager_dummyNodeTable[] = { NULL };
 
 
 /*---------------------------------------------------------------------------*/
@@ -275,16 +275,16 @@ ShinyNode* _ShinyManager_createNode(ShinyManager *self, ShinyNodeCache* a_cache,
 
 /*---------------------------------------------------------------------------*/
 
-void _ShinyManager_createNodePool(ShinyManager *self, uint32_t a_nCount) {
-    self->_firstNodePool = ShinyNodePool_create(a_nCount);
+void _ShinyManager_createNodePool(ShinyManager * self, uint32_t nodePoolCapacity) {
+    self->_firstNodePool = ShinyNodePool_create(nodePoolCapacity);
     self->_lastNodePool = self->_firstNodePool;
 }
 
 
 /*---------------------------------------------------------------------------*/
 
-void _ShinyManager_resizeNodePool(ShinyManager *self, uint32_t a_nCount) {
-    ShinyNodePool* pPool = ShinyNodePool_create(a_nCount);
+void _ShinyManager_resizeNodePool(ShinyManager *self, uint32_t additionalPoolCapacity) {
+    ShinyNodePool * pPool = ShinyNodePool_create(additionalPoolCapacity);
     self->_lastNodePool->nextPool = pPool;
     self->_lastNodePool = pPool;
 }
@@ -305,7 +305,7 @@ void _ShinyManager_createNodeTable(ShinyManager * self, uint32_t tableSize) {
 
 /*---------------------------------------------------------------------------*/
 
-void _ShinyManager_resizeNodeTable(ShinyManager *self, uint32_t newTableSize) {
+void _ShinyManager_resizeNodeTable(ShinyManager * self, uint32_t newTableSize) {
 
     ShinyNodePool * currentNodePool;
 
