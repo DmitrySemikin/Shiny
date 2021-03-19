@@ -292,14 +292,14 @@ void _ShinyManager_resizeNodePool(ShinyManager *self, uint32_t a_nCount) {
 
 /*---------------------------------------------------------------------------*/
 
-void _ShinyManager_createNodeTable(ShinyManager *self, uint32_t a_nCount) {
-    self->_tableSize = a_nCount;
-    self->_tableMask = a_nCount - 1;
+void _ShinyManager_createNodeTable(ShinyManager * self, uint32_t tableSize) {
 
-    self->_nodeTable = (ShinyNodeTable*)
-        malloc(sizeof(ShinyNode*) * a_nCount);
+    self->_tableSize = tableSize;
+    self->_tableMask = tableSize - 1;
 
-    memset(self->_nodeTable, 0, a_nCount * sizeof(ShinyNode*));
+    self->_nodeTable = (ShinyNodeTable*) malloc(sizeof(ShinyNode*) * tableSize);
+
+    memset(self->_nodeTable, 0, tableSize * sizeof(ShinyNode*));
 }
 
 
