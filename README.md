@@ -16,9 +16,32 @@ from similar projects:
    please, report them).
  * Really easy to start with. (TODO: Write instructions for this)
 
-
 This project is probably a good call for you, if
- * TODO
+ * You find yourself manually writing "printf-s" trying to find out, how
+   much time execution of this or another region on your code requires
+   (especially, if you notice, that pure "printf-s" are no more sufficient).
+ * You need to find a bottleneck in the existing code (especially if the
+   sourcebase is big and complicated, so that use of automated things like
+   valgrind is not really feasible).
+ * You are on the system, where other tools do not work.
+ * You prefer precise control and flexibility of manual instrumentation
+   over sampling or automated instrumentation.
+ * You search for a solution to integrate into your project to monitor
+   it's performance - either manually or using automated tests, -
+   but still have an option to completely compile it out with single
+   compiler switch.
+
+This project does NOT provide:
+ * Graphical front end (Ogre-based front end from the original project
+   was discontinued in this fork).
+ * Automated instrumentation or sampling.
+
+
+## Multithreading ?? ##
+
+TODO
+
+My first impression, that it will not work, but it needs to be prooved.
 
 
 ## Relation to the original project ##
