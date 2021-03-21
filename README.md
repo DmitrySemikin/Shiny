@@ -37,7 +37,7 @@ This project does NOT provide:
  * Graphical front end (Ogre-based front end from the original project
    was discontinued in this fork).
  * Automated instrumentation or sampling.
- * No support for multithreading (TODO: check, that it is indeed the case).
+ * No support for multithreading.
 
 
 
