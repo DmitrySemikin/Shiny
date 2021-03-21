@@ -11,11 +11,12 @@ from similar projects:
  * Very low footprint
  * Implemented in C. So not only can it be easily integrated into
    pure C projects, but it can also be used on systems, where 
-   C++ is not supported at all.
+   C++ is not supported at all. Couple of convenience features
+   are only available in C++ though.
  * Intended to be usable with more or less any modern and not so modern
    compilers on more or less any system/OS (If you discover any problems,
    please, report them).
- * Really easy to start with. (TODO: Write instructions for this)
+ * Really easy to start with (see "Get Started" section below).
 
 This project is probably a good call for you, if
  * You find yourself manually writing "printf-s" trying to find out, how
@@ -36,13 +37,25 @@ This project does NOT provide:
  * Graphical front end (Ogre-based front end from the original project
    was discontinued in this fork).
  * Automated instrumentation or sampling.
+ * No support for multithreading (TODO: check, that it is indeed the case).
 
 
-## Multithreading ?? ##
 
-TODO
+## Get Started ##
 
-My first impression, that it will not work, but it needs to be prooved.
+Check the source code of examples. They are really simple
+and show the most important macros.
+
+There are two approaches to integrate this library:
+* Either build das-shiny as the static (or dynamic) library
+  using CMake and then link it into your project. This way
+  is convenient, if your project uses CMake.
+* Or just include all the files of das-shiny directly into
+  your project. This approach may be easier, if your project
+  does not use CMake.
+
+TODO: Provide more details.
+
 
 
 ## Relation to the original project ##
@@ -52,9 +65,10 @@ This project is a fork of the
 developed by Aidin Abedi (see [README.original](README.original.md) for details)
 
 
+
 ### Changes ###
 
-Major changes so far:
+Major changes since the fork so far:
 * The directory structure is changed. 
 * Support of Lua and Ogre is dropped.
 * Redundant files are removed.
