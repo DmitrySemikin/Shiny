@@ -9,10 +9,11 @@ with manual instrumentation originally developed by Aidin Abedi
 Below is the list of traits of this library, which makes it different
 from similar projects:
  * Very low footprint
- * Implemented in C. So it can be used not only with pure C projects, but
-   also on the systems, where C++ is not supported at all.
+ * Implemented in C. So not only can it be easily integrated into
+   pure C projects, but it can also be used on systems, where 
+   C++ is not supported at all.
  * Intended to be usable with more or less any modern and not so modern
-   compilers on more or less any system/os (If you discover any problems,
+   compilers on more or less any system/OS (If you discover any problems,
    please, report them).
  * Really easy to start with. (TODO: Write instructions for this)
 
