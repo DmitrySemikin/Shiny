@@ -36,7 +36,7 @@ This project is probably a good call for you, if
 This project does NOT provide:
  * Graphical front end (Ogre-based front end from the original project
    was discontinued in this fork).
- * Automated instrumentation or sampling.
+ * No automated instrumentation or sampling.
  * No support for multithreading.
 
 
