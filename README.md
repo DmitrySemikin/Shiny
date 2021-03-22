@@ -8,7 +8,7 @@ with manual instrumentation originally developed by Aidin Abedi
 
 Below is the list of traits of this library, which makes it different
 from similar projects:
- * Very low footprint
+ * Very low overhead.
  * Implemented in C. So not only can it be easily integrated into
    pure C projects, but it can also be used on systems, where 
    C++ is not supported at all. Couple of convenience features
