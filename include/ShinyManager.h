@@ -26,7 +26,20 @@ extern "C" {
 #endif
 
 
-typedef struct {
+/**
+ * ShinyManager (and it's instance `Shiny_instance`) is a central object in Shiny.
+ * 
+ * At the beginning of the code region, which is going to be profiled
+ * a static `ShinyZone` object is declared and then immediately passed to
+ * `ShinyManager_lookupAndBeginNode()`. On a first call this will create
+ * corresponding Node, attach Zone to it and attach both: Node and Zone
+ * to the manager.
+ * 
+ * On subsequent calls...
+ */
+
+/* TODO: Reorder fields to group them according to semantics. Don't forget reorder accordingly initializer in .c file. */
+typedef struct _ShinyManager {
 
     shinytick_t _lastTick;
 
@@ -43,20 +56,21 @@ typedef struct {
 
     uint32_t _tableSize; /**< Number of slots in _nodeTable. Must be power of 2. */
 
-    uint32_t nodeCount;
-    uint32_t zoneCount;
+    uint32_t nodeCount; /**< Number of nodes attached to the manager. */
+    uint32_t zoneCount; /**< Number of zones attached to the manager. */
 
     ShinyZone * _lastZone; /**< End of the linked list of zones (zone->next) */
 
     ShinyNodePool * _lastNodePool;  /**< End of the linked list of node pools. */
     ShinyNodePool * _firstNodePool; /**< Beginning of the linked list of node pools. */
 
-    ShinyNode rootNode;
+    /* rootNode and rootZone are not pointers. They are placeholders to attach actual further nodes. */
+    ShinyNode rootNode; /**< First node in the linked list of nodes. */
     ShinyZone rootZone; /**< First zone in the linked list of zones. */
 
     float damping;
 
-    int _initialized;
+    int _initialized; /**< Is ShinyManager already initialized. */
     int _firstUpdate;
 } ShinyManager;
 
@@ -147,12 +161,17 @@ SHINY_INLINE void ShinyManager_beginNode(ShinyManager *self, ShinyNode *a_node) 
     self->_curNode = a_node;
 }
 
-SHINY_INLINE void ShinyManager_lookupAndBeginNode(ShinyManager *self, ShinyNodeCache *a_cache, ShinyZone *a_zone) {
+SHINY_INLINE void ShinyManager_lookupAndBeginNode(
+    ShinyManager * self, 
+    ShinyNodeCache * nodeCache, 
+    ShinyZone * zone
+) {
 
-    if (self->_curNode != (*a_cache)->parent)
-        *a_cache = _ShinyManager_lookupNode(self, a_cache, a_zone);
+    if (self->_curNode != (*nodeCache)->parent) {
+        *nodeCache = _ShinyManager_lookupNode(self, nodeCache, zone);
+    }
 
-    ShinyManager_beginNode(self, *a_cache);
+    ShinyManager_beginNode(self, *nodeCache);
 }
 
 SHINY_INLINE void ShinyManager_endCurNode(ShinyManager *self) {

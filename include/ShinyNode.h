@@ -8,6 +8,7 @@
 
 
 #include "ShinyData.h"
+#include "ShinyStructForwardDeclarations.h"
 #include "ShinyTools.h"
 
 
@@ -15,16 +16,16 @@
 extern "C" {
 #endif
 
-typedef struct _ShinyNode {
+struct _ShinyNode {
 
     ShinyLastData _last;
 
-    struct _ShinyZone * zone;
-    struct _ShinyNode * parent;
-    struct _ShinyNode * nextSibling;
+    ShinyZone * zone;
+    ShinyNode * parent;
+    ShinyNode * nextSibling;
 
-    struct _ShinyNode * firstChild;
-    struct _ShinyNode * lastChild;
+    ShinyNode * firstChild;
+    ShinyNode * lastChild;
 
     uint32_t childCount;
     uint32_t entryLevel;
@@ -33,7 +34,7 @@ typedef struct _ShinyNode {
 
     ShinyData data;
 
-} ShinyNode;
+};
 
 
 /*---------------------------------------------------------------------------*/

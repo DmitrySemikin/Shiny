@@ -13,6 +13,7 @@
 #endif
 
 #include "ShinyData.h"
+#include "ShinyStructForwardDeclarations.h"
 
 
 #ifdef __cplusplus
@@ -24,12 +25,12 @@ extern "C" {
 #define SHINY_ZONE_STATE_INITIALIZED    1
 #define SHINY_ZONE_STATE_UPDATING       2
 
-typedef struct _ShinyZone {
-    struct _ShinyZone * next;
-    int                 zoneState;
-    const char *        name;
-    ShinyData           data;
-} ShinyZone;
+struct _ShinyZone {
+    ShinyZone *  next;
+    int          zoneState;
+    const char * name;
+    ShinyData    data;
+};
 
 
 SHINY_INLINE void ShinyZone_init(ShinyZone * self, ShinyZone * a_prev) {
