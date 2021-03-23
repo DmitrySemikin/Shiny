@@ -83,8 +83,8 @@ struct _ShinyNode;
 struct _ShinyZone;
 
 /* TODO: This one should not be here. Move it to the appropriate location */
-typedef struct _ShinyNode* ShinyNodeCache;
-typedef struct _ShinyNode* ShinyNodeTable;
+typedef struct _ShinyNode *  ShinyNodeCache;
+typedef struct _ShinyNode *  ShinyNodeTable;
 #endif
 
 /*====================================================================================================================*/

@@ -54,16 +54,21 @@ SHINY_INLINE void ShinyNode_addChild(ShinyNode* self,  ShinyNode* a_child) {
     }
 }
 
-SHINY_INLINE void ShinyNode_init(ShinyNode* self, ShinyNode* a_parent, struct _ShinyZone* a_zone, ShinyNodeCache* a_cache) {
+SHINY_INLINE void ShinyNode_init(
+    ShinyNode * self, 
+    ShinyNode * parentNode, 
+    struct _ShinyZone * zone, 
+    ShinyNodeCache * nodeCache
+) {
     /* NOTE: all member variables are assumed to be zero when allocated */
 
-    self->zone = a_zone;
-    self->parent = a_parent;
+    self->zone = zone;
+    self->parent = parentNode;
 
-    self->entryLevel = a_parent->entryLevel + 1;
-    ShinyNode_addChild(a_parent, self);
+    self->entryLevel = parentNode->entryLevel + 1;
+    ShinyNode_addChild(parentNode, self);
 
-    self->_cache = a_cache;
+    self->_cache = nodeCache;
 }
 
 SHINY_API void ShinyNode_updateTree(ShinyNode* self, float a_damping);

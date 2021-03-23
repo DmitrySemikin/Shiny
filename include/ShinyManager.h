@@ -30,29 +30,29 @@ typedef struct {
 
     shinytick_t _lastTick;
 
-    ShinyNode *_curNode;
+    ShinyNode * _curNode;
 
-    uint32_t _tableMask; /* = _tableSize - 1 */
+    uint32_t _tableMask; /* = _tableSize - 1 */ /**< To calculate table index from hash. */
 
-    ShinyNodeTable *_nodeTable;
+    ShinyNodeTable * _nodeTable; /**< Hash table of nodes. */
 
 #if SHINY_LOOKUP_RATE == TRUE
-    uint64_t _lookupCount;
-    uint64_t _lookupSuccessCount;
+    uint64_t _lookupCount;        /**< Counter of lookups in _nodeTable hash table. */
+    uint64_t _lookupSuccessCount; /**< Counter of successful lookups in _nodesTable. */
 #endif
 
-    uint32_t _tableSize;
+    uint32_t _tableSize; /**< Number of slots in _nodeTable. Must be power of 2. */
 
     uint32_t nodeCount;
     uint32_t zoneCount;
 
-    ShinyZone *_lastZone;
+    ShinyZone * _lastZone; /**< End of the linked list of zones (zone->next) */
 
-    ShinyNodePool *_lastNodePool;
-    ShinyNodePool *_firstNodePool;
+    ShinyNodePool * _lastNodePool;  /**< End of the linked list of node pools. */
+    ShinyNodePool * _firstNodePool; /**< Beginning of the linked list of node pools. */
 
     ShinyNode rootNode;
-    ShinyZone rootZone;
+    ShinyZone rootZone; /**< First zone in the linked list of zones. */
 
     float damping;
 

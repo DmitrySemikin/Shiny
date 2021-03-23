@@ -72,8 +72,9 @@ ShinyNode * _ShinyManager_dummyNodeTable[] = { NULL };
 #endif
 
 /* primary hash function */
-SHINY_INLINE uint32_t hash_value(void* a_pParent, void* a_pZone) {
-    uint32_t a = (uint32_t) a_pParent + (uint32_t) a_pZone;
+SHINY_INLINE uint32_t _ShinyHashValueForNodeIndex(void * nodeParent, void * nodeZone) {
+
+    uint32_t a = (uint32_t) nodeParent + (uint32_t) nodeZone;
 
     a = (a+0x7ed55d16) + (a<<12);
     a = (a^0xc761c23c) ^ (a>>19);
@@ -84,8 +85,8 @@ SHINY_INLINE uint32_t hash_value(void* a_pParent, void* a_pZone) {
  * secondary hash used as index offset: force it to be odd
  * so it's relatively prime to the power-of-two table size
  */
-SHINY_INLINE uint32_t hash_offset(uint32_t a) {
-    return ((a << 8) + (a >> 4)) | 1;
+SHINY_INLINE uint32_t _ShinyHashValueForNodeIndexOffset(uint32_t currentIndex) {
+    return ((currentIndex << 8) + (currentIndex >> 4)) | 1;
 }
 
 #if SHINY_COMPILER == SHINY_COMPILER_MSVC
@@ -158,48 +159,50 @@ void ShinyManager_destroy(ShinyManager *self) {
 
 ShinyNode * _ShinyManager_lookupNode(
     ShinyManager *   self,
-    ShinyNodeCache * a_cache,
-    ShinyZone *      a_zone
+    ShinyNodeCache * nodeCache,
+    ShinyZone *      zone
 ) {
-    uint32_t nHash = hash_value(self->_curNode, a_zone);
-    uint32_t nIndex = nHash & self->_tableMask;
-    ShinyNode * pNode = self->_nodeTable[nIndex];
+    uint32_t currentHash = _ShinyHashValueForNodeIndex(self->_curNode, zone);
+    uint32_t currentIndex = currentHash & self->_tableMask;
+    ShinyNode * foundNode = self->_nodeTable[currentIndex];
 
     _ShinyManager_incLookup(self);
     _ShinyManager_incLookupSuccess(self);
 
-    if (pNode) {
-        uint32_t nStep;
+    if (foundNode) {
+        uint32_t step;
 
-        if (ShinyNode_isEqual(pNode, self->_curNode, a_zone)) {
-            return pNode; /* found it! */
+        /* check that foundNode->_parent == self->_curNode && foundNode->zone == zone */
+        if (ShinyNode_isEqual(foundNode, self->_curNode, zone)) {
+            return foundNode; /* found it! */
         }
 
         /* hash collision: */
 
         /* compute a secondary hash function for stepping */
-        nStep = hash_offset(nHash);
+        step = _ShinyHashValueForNodeIndexOffset(currentHash);
 
         for (;;) {
             _ShinyManager_incLookup(self);
 
-            nIndex = (nIndex + nStep) & self->_tableMask;
-            pNode = self->_nodeTable[nIndex];
+            currentIndex = (currentIndex + step) & self->_tableMask;
+            foundNode = self->_nodeTable[currentIndex];
 
-            if (!pNode) {
+            if (!foundNode) {
                 break; /* found empty slot */
-            } else if (ShinyNode_isEqual(pNode, self->_curNode, a_zone)) {
-                return pNode; /* found it! */
+            } else if (ShinyNode_isEqual(foundNode, self->_curNode, zone)) {
+                return foundNode; /* found it! */
             }
         }
 
         /* loop is guaranteed to end because the hash table is never full */
     }
 
-    if (a_zone->zoneState == SHINY_ZONE_STATE_HIDDEN) { /* zone is not initialized */
-        ShinyZone_init(a_zone, self->_lastZone);
+    /* at this point `foundNode` points to empty slot in the table. */
+    if (zone->zoneState == SHINY_ZONE_STATE_HIDDEN) { /* zone is not initialized */
+        ShinyZone_init(zone, self->_lastZone);
 
-        self->_lastZone = a_zone;
+        self->_lastZone = zone;
         self->zoneCount++;
 
         if (self->_initialized == FALSE) { /* first time init */
@@ -208,17 +211,18 @@ ShinyNode * _ShinyManager_lookupNode(
             _ShinyManager_createNodeTable(self, TABLE_SIZE_INIT);
             _ShinyManager_createNodePool(self, TABLE_SIZE_INIT / 2);
 
-            /* initialization has invalidated nIndex
-             * we must compute nIndex again
+            /* initialization has invalidated `currentIndex`
+             * we must compute `currentIndex` again
              */
-            return _ShinyManager_createNode(self, a_cache, a_zone);
+            return _ShinyManager_createNode(self, nodeCache, zone);
+
+            /* Althouth nodeCount is not updated
+             * it includes rootNode so it adds up.
+             */
         }
     }
 
-    /* Althouth nodeCount is not updated
-     * it includes rootNode so it adds up.
-     *
-     * check if we need to grow the table
+    /* Check if we need to grow the table
      * we keep it at most 1/2 full to be very fast
      */
     if (self->_tableSize < 2 * self->nodeCount) {
@@ -229,16 +233,16 @@ ShinyNode * _ShinyManager_lookupNode(
         /* resize has invalidated nIndex
          * we must compute nIndex again
          */
-        return _ShinyManager_createNode(self, a_cache, a_zone);
+        return _ShinyManager_createNode(self, nodeCache, zone);
     }
 
     self->nodeCount++;
 
     {
-        ShinyNode* pNewNode = ShinyNodePool_newItem(self->_lastNodePool);
-        ShinyNode_init(pNewNode, self->_curNode, a_zone, a_cache);
+        ShinyNode * pNewNode = ShinyNodePool_newItem(self->_lastNodePool);
+        ShinyNode_init(pNewNode, self->_curNode, zone, nodeCache);
 
-        self->_nodeTable[nIndex] = pNewNode;
+        self->_nodeTable[currentIndex] = pNewNode;
         return pNewNode;
     }
 }
@@ -246,30 +250,36 @@ ShinyNode * _ShinyManager_lookupNode(
 
 /*---------------------------------------------------------------------------*/
 
-void _ShinyManager_insertNode(ShinyManager *self, ShinyNode* a_pNode) {
-    uint32_t nHash = hash_value(a_pNode->parent, a_pNode->zone);
-    uint32_t nIndex = nHash & self->_tableMask;
+void _ShinyManager_insertNode(ShinyManager * self, ShinyNode * node) {
 
-    if (self->_nodeTable[nIndex]) {
-        uint32_t nStep = hash_offset(nHash);
+    uint32_t newNodeHash = _ShinyHashValueForNodeIndex(node->parent, node->zone);
+    uint32_t newNodeIndex = newNodeHash & self->_tableMask;
 
-        while (self->_nodeTable[nIndex])
-            nIndex = (nIndex + nStep) & self->_tableMask;
+    if (self->_nodeTable[newNodeIndex]) {
+        uint32_t step = _ShinyHashValueForNodeIndexOffset(newNodeHash);
+
+        while (self->_nodeTable[newNodeIndex]) {
+            newNodeIndex = (newNodeIndex + step) & self->_tableMask;
+        }
     }
 
-    self->_nodeTable[nIndex] = a_pNode;
+    self->_nodeTable[newNodeIndex] = node;
 }
 
 
 /*---------------------------------------------------------------------------*/
 
-ShinyNode* _ShinyManager_createNode(ShinyManager *self, ShinyNodeCache* a_cache, ShinyZone* a_pZone) {
-    ShinyNode* pNewNode = ShinyNodePool_newItem(self->_lastNodePool);
-    ShinyNode_init(pNewNode, self->_curNode, a_pZone, a_cache);
+ShinyNode * _ShinyManager_createNode(
+    ShinyManager * self, 
+    ShinyNodeCache * nodeCache, 
+    ShinyZone * zone
+) {
+    ShinyNode * newNode = ShinyNodePool_newItem(self->_lastNodePool);
+    ShinyNode_init(newNode, self->_curNode, zone, nodeCache);
 
     self->nodeCount++;
-    _ShinyManager_insertNode(self, pNewNode);
-    return pNewNode;
+    _ShinyManager_insertNode(self, newNode);
+    return newNode;
 }
 
 
