@@ -30,7 +30,7 @@ struct _ShinyNode {
     uint32_t childCount;
     uint32_t entryLevel;
 
-    ShinyNodeCache * _cache;
+    ShinyNodeCache * _cache; /**< seems to be unused */
 
     ShinyData data;
 
@@ -44,21 +44,21 @@ extern ShinyNode _ShinyNode_dummy;
 
 /*---------------------------------------------------------------------------*/
 
-SHINY_INLINE void ShinyNode_addChild(ShinyNode* self,  ShinyNode* a_child) {
+SHINY_INLINE void ShinyNode_addChild(ShinyNode * self,  ShinyNode * childNode) {
     if (self->childCount++) {
-        self->lastChild->nextSibling = a_child;
-        self->lastChild = a_child;
+        self->lastChild->nextSibling = childNode;
+        self->lastChild = childNode;
 
     } else {
-        self->lastChild = a_child;
-        self->firstChild = a_child;
+        self->lastChild = childNode;
+        self->firstChild = childNode;
     }
 }
 
 SHINY_INLINE void ShinyNode_init(
     ShinyNode * self, 
     ShinyNode * parentNode, 
-    struct _ShinyZone * zone, 
+    ShinyZone * zone, 
     ShinyNodeCache * nodeCache
 ) {
     /* NOTE: all member variables are assumed to be zero when allocated */
@@ -79,11 +79,11 @@ SHINY_INLINE void ShinyNode_destroy(ShinyNode* self) {
     *(self->_cache) = &_ShinyNode_dummy;
 }
 
-SHINY_INLINE void ShinyNode_appendTicks(ShinyNode* self, shinytick_t a_elapsedTicks) {
-    self->_last.selfTicks += a_elapsedTicks;
+SHINY_INLINE void ShinyNode_appendTicks(ShinyNode * self, shinytick_t elapsedTicks) {
+    self->_last.selfTicks += elapsedTicks;
 }
 
-SHINY_INLINE void ShinyNode_beginEntry(ShinyNode* self) {
+SHINY_INLINE void ShinyNode_beginEntry(ShinyNode * self) {
     self->_last.entryCount++;
 }
 
@@ -95,6 +95,7 @@ SHINY_INLINE int ShinyNode_isDummy(ShinyNode* self) {
     return (self == &_ShinyNode_dummy);
 }
 
+/** It is not really "isEqual", but rather "is child with this zone". */
 SHINY_INLINE int ShinyNode_isEqual(ShinyNode* self, const ShinyNode* a_parent, const struct _ShinyZone* a_zone) {
     return (self->parent == a_parent && self->zone == a_zone);
 }

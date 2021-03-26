@@ -157,6 +157,11 @@ void ShinyManager_destroy(ShinyManager *self) {
 
 /*---------------------------------------------------------------------------*/
 
+/*
+ * 1. index <- self->currentNode, zone
+ * 2. If found (curNode is parent of Found node), then return foundNode (is stored in cache)
+ * 3. Else create new node, where self->currentNode is parent and put it into index
+ */
 ShinyNode * _ShinyManager_lookupNode(
     ShinyManager *   self,
     ShinyNodeCache * nodeCache,
@@ -239,11 +244,11 @@ ShinyNode * _ShinyManager_lookupNode(
     self->nodeCount++;
 
     {
-        ShinyNode * pNewNode = ShinyNodePool_newItem(self->_lastNodePool);
-        ShinyNode_init(pNewNode, self->_curNode, zone, nodeCache);
+        ShinyNode * newNode = ShinyNodePool_newItem(self->_lastNodePool);
+        ShinyNode_init(newNode, self->_curNode, zone, nodeCache);
 
-        self->_nodeTable[currentIndex] = pNewNode;
-        return pNewNode;
+        self->_nodeTable[currentIndex] = newNode;
+        return newNode;
     }
 }
 

@@ -154,11 +154,11 @@ SHINY_INLINE uint32_t ShinyManager_allocMemInBytes(const ShinyManager *self) {
            + (self->_firstNodePool) ? ShinyNodePool_memoryUsageChain(self->_firstNodePool) : 0;
 }
 
-SHINY_INLINE void ShinyManager_beginNode(ShinyManager *self, ShinyNode *a_node) {
-    ShinyNode_beginEntry(a_node);
+SHINY_INLINE void ShinyManager_beginNode(ShinyManager * self, ShinyNode * node) {
+    ShinyNode_beginEntry(node);
 
     _ShinyManager_appendTicksToCurNode(self);
-    self->_curNode = a_node;
+    self->_curNode = node;
 }
 
 SHINY_INLINE void ShinyManager_lookupAndBeginNode(
