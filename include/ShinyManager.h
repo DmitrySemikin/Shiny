@@ -44,7 +44,7 @@ extern "C" {
  * 
  * At the beginning of each Zone the method `ShinyManager_lookupAndBeginNode()`
  * is called. It creates new or finds existing node, which corresponds
- * to current Zone in context of `Shiny_instance->_curNode` at the moment
+ * to current Zone in context of `Shiny_instance->_currentNode` at the moment
  * of invocation, makes it current and starts time recording for this node.
  * This all happens as part of macro `PROFILE_BEGIN()`
  * 
@@ -61,16 +61,11 @@ typedef struct _ShinyManager {
 
     shinytick_t _lastTick;
 
-    ShinyNode * _curNode;
+    ShinyNode * _currentNode;
 
-    uint32_t _tableMask; /* = _tableSize - 1 */ /**< To calculate table index from hash. */
+    uint32_t _tableMask; /**< = _tableSize - 1 : To calculate table index from hash. */
 
     ShinyNodeTable * _nodeTable; /**< Hash table of nodes. */
-
-#if SHINY_LOOKUP_RATE == TRUE
-    uint64_t _lookupCount;        /**< Counter of lookups in _nodeTable hash table. */
-    uint64_t _lookupSuccessCount; /**< Counter of successful lookups in _nodesTable. */
-#endif
 
     uint32_t _tableSize; /**< Number of slots in _nodeTable. Must be power of 2. */
 
@@ -86,10 +81,16 @@ typedef struct _ShinyManager {
     ShinyNode rootNode; /**< First node in the linked list of nodes. */
     ShinyZone rootZone; /**< First zone in the linked list of zones. */
 
-    float damping;
+    float damping; /**< Used when calling `update()` repeatedly. */
 
     int _initialized; /**< Is ShinyManager already initialized. */
     int _firstUpdate;
+
+#if SHINY_LOOKUP_RATE == TRUE
+    uint64_t _lookupCount;        /**< Counter of lookups in _nodeTable hash table. */
+    uint64_t _lookupSuccessCount; /**< Counter of successful lookups in _nodesTable. */
+#endif
+
 } ShinyManager;
 
 
@@ -112,7 +113,7 @@ SHINY_INLINE void _ShinyManager_appendTicksToCurNode(ShinyManager *self) {
     shinytick_t curTick;
     ShinyGetTicks(&curTick);
 
-    ShinyNode_appendTicks(self->_curNode, curTick - self->_lastTick);
+    ShinyNode_appendTicks(self->_currentNode, curTick - self->_lastTick);
     self->_lastTick = curTick;
 }
 
@@ -176,7 +177,7 @@ SHINY_INLINE void ShinyManager_beginNode(ShinyManager * self, ShinyNode * node) 
     ShinyNode_beginEntry(node);
 
     _ShinyManager_appendTicksToCurNode(self);
-    self->_curNode = node;
+    self->_currentNode = node;
 }
 
 /** This function is to be called at the beginning of the zone.
@@ -204,7 +205,7 @@ SHINY_INLINE void ShinyManager_lookupAndBeginNode(
     ShinyZone * zone
 ) {
 
-    if (self->_curNode != (*nodeCache)->parent) {
+    if (self->_currentNode != (*nodeCache)->parent) {
         *nodeCache = _ShinyManager_lookupNode(self, nodeCache, zone);
     }
 
@@ -214,7 +215,7 @@ SHINY_INLINE void ShinyManager_lookupAndBeginNode(
 SHINY_INLINE void ShinyManager_endCurNode(ShinyManager *self) {
 
     _ShinyManager_appendTicksToCurNode(self);
-    self->_curNode = self->_curNode->parent;
+    self->_currentNode = self->_currentNode->parent;
 }
 
 /**/

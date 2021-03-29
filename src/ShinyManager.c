@@ -25,7 +25,7 @@
 
 ShinyManager Shiny_instance = {
     /* _lastTick = */ 0,
-    /* _curNode = */ &Shiny_instance.rootNode,
+    /* _currentNode = */ &Shiny_instance.rootNode,
     /* _tableMask = */ 0,
     /* _nodeTable = */ _ShinyManager_dummyNodeTable,
 #if SHINY_LOOKUP_RATE == TRUE
@@ -167,7 +167,7 @@ ShinyNode * _ShinyManager_lookupNode(
     ShinyNodeCache * nodeCache,
     ShinyZone *      zone
 ) {
-    uint32_t currentHash = _ShinyHashValueForNodeIndex(self->_curNode, zone);
+    uint32_t currentHash = _ShinyHashValueForNodeIndex(self->_currentNode, zone);
     uint32_t currentIndex = currentHash & self->_tableMask;
     ShinyNode * foundNode = self->_nodeTable[currentIndex];
 
@@ -177,8 +177,8 @@ ShinyNode * _ShinyManager_lookupNode(
     if (foundNode) {
         uint32_t step;
 
-        /* check that foundNode->_parent == self->_curNode && foundNode->zone == zone */
-        if (ShinyNode_isEqual(foundNode, self->_curNode, zone)) {
+        /* check that foundNode->_parent == self->_currentNode && foundNode->zone == zone */
+        if (ShinyNode_isEqual(foundNode, self->_currentNode, zone)) {
             return foundNode; /* found it! */
         }
 
@@ -195,7 +195,7 @@ ShinyNode * _ShinyManager_lookupNode(
 
             if (!foundNode) {
                 break; /* found empty slot */
-            } else if (ShinyNode_isEqual(foundNode, self->_curNode, zone)) {
+            } else if (ShinyNode_isEqual(foundNode, self->_currentNode, zone)) {
                 return foundNode; /* found it! */
             }
         }
@@ -245,7 +245,7 @@ ShinyNode * _ShinyManager_lookupNode(
 
     {
         ShinyNode * newNode = ShinyNodePool_newItem(self->_lastNodePool);
-        ShinyNode_init(newNode, self->_curNode, zone, nodeCache);
+        ShinyNode_init(newNode, self->_currentNode, zone, nodeCache);
 
         self->_nodeTable[currentIndex] = newNode;
         return newNode;
@@ -280,7 +280,7 @@ ShinyNode * _ShinyManager_createNode(
     ShinyZone * zone
 ) {
     ShinyNode * newNode = ShinyNodePool_newItem(self->_lastNodePool);
-    ShinyNode_init(newNode, self->_curNode, zone, nodeCache);
+    ShinyNode_init(newNode, self->_currentNode, zone, nodeCache);
 
     self->nodeCount++;
     _ShinyManager_insertNode(self, newNode);
@@ -366,7 +366,7 @@ void ShinyManager_destroyNodes(ShinyManager *self) {
         self->_tableMask = 0;
     }
 
-    self->_curNode = &self->rootNode;
+    self->_currentNode = &self->rootNode;
     self->nodeCount = 1;
 
     _ShinyManager_init(self);
