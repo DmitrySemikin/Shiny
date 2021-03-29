@@ -6,11 +6,11 @@
 #if SHINY_IS_COMPILED
 
 
-struct _ShinyNode;
-typedef  struct _ShinyNode  ShinyNode;
+struct ShinyNode;
+typedef  struct ShinyNode  ShinyNode;
 
-struct _ShinyZone;
-typedef  struct _ShinyZone  ShinyZone;
+struct ShinyZone;
+typedef  struct ShinyZone  ShinyZone;
 
 
 #endif /* SHINY_IS_COMPILED */

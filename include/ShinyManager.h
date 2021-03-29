@@ -30,10 +30,10 @@ extern "C" {
  * ShinyManager (and it's instance `Shiny_instance`) is a central object in Shiny.
  * 
  * It manages `ShinyZone` and `ShinyNode` objects. Particularly, it
- * collects all zones linked to its `rootZone`. And it creates nodes
+ * collects all zones linked to its `_firstZone`. And it creates nodes
  * as needed, assigns them to Zones and builds tree-structure out of
  * them, which denotes call-tree or inclusion-tree. This tree is attached
- * to `rootNode`.
+ * to `_rootNode`.
  * 
  * As auxiliary objects `NodePool`s are managed by `ShinyManager`.
  * 
@@ -55,36 +55,33 @@ extern "C" {
  * from Nodes and assigns it to Zones. Used in macro `PROFILE_UPDATE()`.
  * It should be called before outputting the profiling results.
  */
+typedef struct ShinyManager {
 
-/* TODO: Reorder fields to group them according to semantics. Don't forget reorder accordingly initializer in .c file. */
-typedef struct _ShinyManager {
+    /* Note: We don't really care about alignment. We only have one object of this type. */
 
     shinytick_t _lastTick;
 
-    ShinyNode * _currentNode;
+    ShinyNode * _currentNode;     /**< Well... it is current node. It will be context for any Zone, which execution meets next. */
 
-    uint32_t _tableMask; /**< = _tableSize - 1 : To calculate table index from hash. */
+    ShinyNode _rootNode;         /**< Root (dummy) node in the tree of nodes. Not pointer. */
+
+    ShinyZone _firstZone;         /**< First (dummy) zone in the linked list of zones. Not pointer. */
+    ShinyZone * _lastZone;       /**< End of the linked list of zones (zone->next), which starts with `_firstZone`. */
+
+    uint32_t _nodeCount;         /**< Number of nodes attached to the manager. */
+    uint32_t _zoneCount;         /**< Number of zones attached to the manager. */
 
     ShinyNodeTable * _nodeTable; /**< Hash table of nodes. */
+    uint32_t _tableSize;         /**< Number of slots in _nodeTable. Must be power of 2. */
+    uint32_t _tableMask;         /**< (= _tableSize - 1) To calculate table index from hash. */
 
-    uint32_t _tableSize; /**< Number of slots in _nodeTable. Must be power of 2. */
-
-    uint32_t nodeCount; /**< Number of nodes attached to the manager. */
-    uint32_t zoneCount; /**< Number of zones attached to the manager. */
-
-    ShinyZone * _lastZone; /**< End of the linked list of zones (zone->next) */
-
-    ShinyNodePool * _lastNodePool;  /**< End of the linked list of node pools. */
     ShinyNodePool * _firstNodePool; /**< Beginning of the linked list of node pools. */
+    ShinyNodePool * _lastNodePool;  /**< End of the linked list of node pools. */
 
-    /* rootNode and rootZone are not pointers. They are placeholders to attach actual further nodes. */
-    ShinyNode rootNode; /**< First node in the linked list of nodes. */
-    ShinyZone rootZone; /**< First zone in the linked list of zones. */
+    float damping;               /**< Used when calling `update()` repeatedly. */
 
-    float damping; /**< Used when calling `update()` repeatedly. */
-
-    int _initialized; /**< Is ShinyManager already initialized. */
-    int _firstUpdate;
+    int _initialized;            /**< Is ShinyManager already initialized: 0 for FALSE, 1 for TRUE. */
+    int _firstUpdate;            /**< Is it first call of `ShinyManager_Update()`: 0 for FALSE, 1 for TRUE. */
 
 #if SHINY_LOOKUP_RATE == TRUE
     uint64_t _lookupCount;        /**< Counter of lookups in _nodeTable hash table. */
@@ -137,17 +134,17 @@ SHINY_API void _ShinyManager_insertNode(ShinyManager *self, ShinyNode *a_pNode);
 SHINY_INLINE void _ShinyManager_init(ShinyManager *self) {
     self->_initialized = TRUE;
 
-    self->rootNode._last.entryCount = 1;
-    self->rootNode._last.selfTicks = 0;
+    self->_rootNode._last.entryCount = 1;
+    self->_rootNode._last.selfTicks = 0;
     ShinyGetTicks(&self->_lastTick);
 }
 
 SHINY_INLINE void _ShinyManager_uninit(ShinyManager *self) {
     self->_initialized = FALSE;
 
-    ShinyNode_clear(&self->rootNode);
-    self->rootNode.parent = &self->rootNode;
-    self->rootNode.zone = &self->rootZone;
+    ShinyNode_clear(&self->_rootNode);
+    self->_rootNode.parent = &self->_rootNode;
+    self->_rootNode.zone = &self->_firstZone;
 }
 
 /* TODO: Move private functions to the .c file. */
@@ -165,7 +162,7 @@ SHINY_API void ShinyManager_resetZones(ShinyManager *self);
 SHINY_API void ShinyManager_destroyNodes(ShinyManager *self);
 
 SHINY_INLINE float ShinyManager_tableUsage(const ShinyManager *self) {
-    return ((float) self->nodeCount) / ((float) self->_tableSize);
+    return ((float) self->_nodeCount) / ((float) self->_tableSize);
 }
 
 SHINY_INLINE uint32_t ShinyManager_allocMemInBytes(const ShinyManager *self) {
@@ -229,8 +226,8 @@ SHINY_API void ShinyManager_clear(ShinyManager *self);
 SHINY_API void ShinyManager_destroy(ShinyManager *self);
 
 SHINY_INLINE void ShinyManager_sortZones(ShinyManager *self) {
-    if (self->rootZone.next)
-        self->_lastZone = ShinyZone_sortChain(&self->rootZone.next);
+    if (self->_firstZone.next)
+        self->_lastZone = ShinyZone_sortChain(&self->_firstZone.next);
 }
 
 SHINY_API const char *ShinyManager_getOutputErrorString(ShinyManager *self);
@@ -240,23 +237,23 @@ SHINY_API void ShinyManager_outputToStream(ShinyManager *self, FILE *stream);
 
 
 SHINY_INLINE int ShinyManager_isZoneSelfTimeBelow(ShinyManager *self, ShinyZone* a_zone, float a_percentage) {
-    return a_percentage * (float) self->rootZone.data.childTicks.cur
+    return a_percentage * (float) self->_firstZone.data.childTicks.cur
            <= (float) a_zone->data.selfTicks.cur;
 }
 
 SHINY_INLINE int ShinyManager_isZoneTotalTimeBelow(ShinyManager *self, ShinyZone* a_zone, float a_percentage) {
-    return a_percentage * (float) self->rootZone.data.childTicks.cur
+    return a_percentage * (float) self->_firstZone.data.childTicks.cur
            <= (float) ShinyData_totalTicksCur(&a_zone->data);
 }
 
 /**/
 
 SHINY_INLINE void ShinyManager_enumerateNodes(ShinyManager *self, void (*a_func)(const ShinyNode*)) {
-    ShinyNode_enumerateNodes(&self->rootNode, a_func);
+    ShinyNode_enumerateNodes(&self->_rootNode, a_func);
 }
 
 SHINY_INLINE void ShinyManager_enumerateZones(ShinyManager *self, void (*a_func)(const ShinyZone*)) {
-    ShinyZone_enumerateZones(&self->rootZone, a_func);
+    ShinyZone_enumerateZones(&self->_firstZone, a_func);
 }
 
 #ifdef __cplusplus
@@ -272,7 +269,7 @@ SHINY_INLINE void ShinyManager_enumerateZones(ShinyManager *self, void (*a_func)
 SHINY_INLINE std::string ShinyManager_outputTreeToString(ShinyManager *self) {
     const char* error = ShinyManager_getOutputErrorString(self);
     if (error) return error;
-    else return ShinyNodesToString(&self->rootNode, self->nodeCount);
+    else return ShinyNodesToString(&self->_rootNode, self->_nodeCount);
 }
 
 SHINY_INLINE std::string ShinyManager_outputFlatToString(ShinyManager *self) {
@@ -280,15 +277,15 @@ SHINY_INLINE std::string ShinyManager_outputFlatToString(ShinyManager *self) {
     if (error) return error;
 
     ShinyManager_sortZones(self);
-    return ShinyZonesToString(&self->rootZone, self->zoneCount);
+    return ShinyZonesToString(&self->_firstZone, self->_zoneCount);
 }
 
 template <class T> void ShinyManager_enumerateNodes(ShinyManager *self, T* a_this, void (T::*a_func)(const ShinyNode*)) {
-    ShinyNode_enumerateNodes(&self->rootNode, a_this, a_func);
+    ShinyNode_enumerateNodes(&self->_rootNode, a_this, a_func);
 }
 
 template <class T> void ShinyManager_enumerateZones(ShinyManager *self, T* a_this, void (T::*a_func)(const ShinyZone*)) {
-    ShinyZone_enumerateZones(&self->rootZone, a_this, a_func);
+    ShinyZone_enumerateZones(&self->_firstZone, a_this, a_func);
 }
 
 class ShinyEndNodeOnDestruction {

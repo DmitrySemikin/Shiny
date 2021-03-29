@@ -16,7 +16,7 @@
 extern "C" {
 #endif
 
-struct _ShinyNode {
+struct ShinyNode {
 
     ShinyLastData _last;
 
@@ -96,7 +96,7 @@ SHINY_INLINE int ShinyNode_isDummy(ShinyNode* self) {
 }
 
 /** It is not really "isEqual", but rather "is child with this zone". */
-SHINY_INLINE int ShinyNode_isEqual(ShinyNode* self, const ShinyNode* a_parent, const struct _ShinyZone* a_zone) {
+SHINY_INLINE int ShinyNode_isEqual(ShinyNode* self, const ShinyNode* a_parent, const struct ShinyZone* a_zone) {
     return (self->parent == a_parent && self->zone == a_zone);
 }
 

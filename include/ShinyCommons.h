@@ -79,12 +79,12 @@
 /* TODO: This one should not be here. Move it to the appropriate location*/
 /* TODO: Rename types not to use leading underscore*/
 #if SHINY_IS_COMPILED == TRUE
-struct _ShinyNode;
-struct _ShinyZone;
+struct ShinyNode;
+struct ShinyZone;
 
 /* TODO: This one should not be here. Move it to the appropriate location */
-typedef struct _ShinyNode *  ShinyNodeCache;
-typedef struct _ShinyNode *  ShinyNodeTable;
+typedef struct ShinyNode *  ShinyNodeCache;
+typedef struct ShinyNode *  ShinyNodeTable;
 #endif
 
 /*====================================================================================================================*/

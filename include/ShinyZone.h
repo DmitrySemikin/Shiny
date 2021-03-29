@@ -25,7 +25,7 @@ extern "C" {
 #define SHINY_ZONE_STATE_INITIALIZED    1
 #define SHINY_ZONE_STATE_UPDATING       2
 
-struct _ShinyZone {
+struct ShinyZone {
     ShinyZone *  next;
     int          zoneState;
     const char * name;
