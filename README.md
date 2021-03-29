@@ -62,8 +62,14 @@ TODO: Provide more details.
 
 This project is a fork of the
 [original Shiny profiler](https://code.google.com/archive/p/shinyprofiler/)
-developed by Aidin Abedi (see [README.original](README.original.md) for details)
+developed by Aidin Abedi (see [README.original](README.original.md) for details).
 
+Even though some changes were done to the build system, organisation of files,
+formatting, naming etc., the actual design of the library and implementation
+of all the algorithms stays virtually unchanged, as it was originally
+implemented by [Aidin Abedi](https://www.linkedin.com/in/aidinabedi/)
+in the original project published on google code:
+[https://code.google.com/archive/p/shinyprofiler/](https://code.google.com/archive/p/shinyprofiler/)
 
 
 ### Changes ###
