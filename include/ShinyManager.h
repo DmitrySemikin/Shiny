@@ -59,19 +59,19 @@ typedef struct ShinyManager {
 
     /* Note: We don't really care about alignment. We only have one object of this type. */
 
-    shinytick_t _lastTick;
+    shinytick_t _lastTick;       /** Wall clock we last noticed (in ticks). Used to calculate time differences. */
 
-    ShinyNode * _currentNode;     /**< Well... it is current node. It will be context for any Zone, which execution meets next. */
+    ShinyNode * _currentNode;    /**< Well... it is current node. It will be context for any Zone, which execution meets next. */
 
     ShinyNode _rootNode;         /**< Root (dummy) node in the tree of nodes. Not pointer. */
 
-    ShinyZone _firstZone;         /**< First (dummy) zone in the linked list of zones. Not pointer. */
+    ShinyZone _firstZone;        /**< First (dummy) zone in the linked list of zones. Not pointer. */
     ShinyZone * _lastZone;       /**< End of the linked list of zones (zone->next), which starts with `_firstZone`. */
 
     uint32_t _nodeCount;         /**< Number of nodes attached to the manager. */
     uint32_t _zoneCount;         /**< Number of zones attached to the manager. */
 
-    ShinyNodeTable * _nodeTable; /**< Hash table of nodes. */
+    ShinyNodeTable * _nodeTable; /**< Hash table of nodes. Hash of node is calculated from its Zone and parentNode. */
     uint32_t _tableSize;         /**< Number of slots in _nodeTable. Must be power of 2. */
     uint32_t _tableMask;         /**< (= _tableSize - 1) To calculate table index from hash. */
 
