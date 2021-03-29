@@ -31,7 +31,7 @@ extern "C" {
  * 
  * It manages `ShinyZone` and `ShinyNode` objects. Particularly, it
  * collects all zones linked to its `rootZone`. And it creates nodes
- * as needed, assignes them to Zones and builds tree-structure out of
+ * as needed, assigns them to Zones and builds tree-structure out of
  * them, which denotes call-tree or inclusion-tree. This tree is attached
  * to `rootNode`.
  * 
@@ -52,8 +52,8 @@ extern "C" {
  * ends time recording in the current node. Used in macro `PROFILE_END()`
  * 
  * The function `ShinyManager_update()` calculates cumulative timing information
- * from Nodes and assignes it to Zones. Used in macro `PROFILE_UPDATE()`.
- * It should be called before outputing the profileing results.
+ * from Nodes and assigns it to Zones. Used in macro `PROFILE_UPDATE()`.
+ * It should be called before outputting the profiling results.
  */
 
 /* TODO: Reorder fields to group them according to semantics. Don't forget reorder accordingly initializer in .c file. */
