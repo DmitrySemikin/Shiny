@@ -23,13 +23,13 @@
 
 /*---------------------------------------------------------------------------*/
 
-ShinyManager Shiny_instance = {
+ShinyManager shinyManagerInstance = {
     /* _lastTick = */ 0,
-    /* _currentNode = */ &Shiny_instance._rootNode,
+    /* _currentNode = */ &shinyManagerInstance._rootNode,
     /* _rootNode = */ {
         /* _last = */ { 0, 0 },
-        /* zone = */ &Shiny_instance._firstZone,
-        /* parent = */ &Shiny_instance._rootNode,
+        /* zone = */ &shinyManagerInstance._firstZone,
+        /* parent = */ &shinyManagerInstance._rootNode,
         /* nextSibling = */ NULL,
         /* firstChild = */ NULL,
         /* lastChild = */ NULL,
@@ -44,10 +44,10 @@ ShinyManager Shiny_instance = {
         /* name = */ "<unprofiled>",
         /* data = */ { { 0, 0 }, { 0, 0 }, { 0, 0 } }
     },
-    /* _lastZone = */ &Shiny_instance._firstZone,
+    /* _lastZone = */ &shinyManagerInstance._firstZone,
     /* _nodeCount = */ 1,
     /* _zoneCount = */ 1,
-    /* _nodeTable = */ _ShinyManager_dummyNodeTable,
+    /* _nodeTable = */ _shinyManager_dummyNodeTable,
     /* _tableSize = */ 1,
     /* _tableMask = */ 0,
     /* _firstNodePool = */ NULL,
@@ -64,7 +64,7 @@ ShinyManager Shiny_instance = {
 
 };
 
-ShinyNode * _ShinyManager_dummyNodeTable[] = { NULL };
+ShinyNode * _shinyManager_dummyNodeTable[] = {NULL };
 
 
 /*---------------------------------------------------------------------------*/
@@ -361,10 +361,10 @@ void ShinyManager_destroyNodes(ShinyManager *self) {
         self->_firstNodePool = NULL;
     }
 
-    if (self->_nodeTable != _ShinyManager_dummyNodeTable) {
+    if (self->_nodeTable != _shinyManager_dummyNodeTable) {
         free(self->_nodeTable);
 
-        self->_nodeTable = _ShinyManager_dummyNodeTable;
+        self->_nodeTable = _shinyManager_dummyNodeTable;
         self->_tableSize = 1;
         self->_tableMask = 0;
     }

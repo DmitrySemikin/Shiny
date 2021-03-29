@@ -27,7 +27,7 @@ extern "C" {
 
 
 /**
- * ShinyManager (and it's instance `Shiny_instance`) is a central object in Shiny.
+ * ShinyManager (and it's instance `shinyManagerInstance`) is a central object in Shiny.
  * 
  * It manages `ShinyZone` and `ShinyNode` objects. Particularly, it
  * collects all zones linked to its `_firstZone`. And it creates nodes
@@ -44,7 +44,7 @@ extern "C" {
  * 
  * At the beginning of each Zone the method `ShinyManager_lookupAndBeginNode()`
  * is called. It creates new or finds existing node, which corresponds
- * to current Zone in context of `Shiny_instance->_currentNode` at the moment
+ * to current Zone in context of `shinyManagerInstance->_currentNode` at the moment
  * of invocation, makes it current and starts time recording for this node.
  * This all happens as part of macro `PROFILE_BEGIN()`
  * 
@@ -97,11 +97,11 @@ typedef struct ShinyManager {
  * Used as initial value of _nodeTable of global ShinyManager instance.
  * By checking the equality one can see, if ShinyManager was initialized.
  */
-extern ShinyNode * _ShinyManager_dummyNodeTable[];
+extern ShinyNode * _shinyManager_dummyNodeTable[];
 
 
 /** Global `ShinyManager` object, which manages everything else. */
-extern ShinyManager Shiny_instance;
+extern ShinyManager shinyManagerInstance;
 
 
 /*---------------------------------------------------------------------------*/
@@ -292,7 +292,7 @@ class ShinyEndNodeOnDestruction {
 public:
 
     inline ~ShinyEndNodeOnDestruction() {
-        ShinyManager_endCurNode(&Shiny_instance);
+        ShinyManager_endCurNode(&shinyManagerInstance);
     }
 };
 

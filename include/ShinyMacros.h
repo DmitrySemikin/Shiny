@@ -14,58 +14,58 @@
 /* public preprocessors */
 
 #define PROFILE_UPDATE()													\
-    ShinyManager_update(&Shiny_instance)
+    ShinyManager_update(&shinyManagerInstance)
 
 #define PROFILE_SET_DAMPING(floatfrom0to1)									\
-    Shiny_instance.damping = (floatfrom0to1);
+    shinyManagerInstance.damping = (floatfrom0to1);
 
 #define PROFILE_GET_DAMPING()												\
-    (Shiny_instance.damping)
+    (shinyManagerInstance.damping)
 
 #define PROFILE_OUTPUT(filename)											\
-    ShinyManager_output(&Shiny_instance, (filename))
+    ShinyManager_output(&shinyManagerInstance, (filename))
 
 #define PROFILE_OUTPUT_STREAM(stream)										\
-    ShinyManager_outputToStream(&Shiny_instance, (stream))
+    ShinyManager_outputToStream(&shinyManagerInstance, (stream))
 
 #ifdef __cplusplus
 #define PROFILE_GET_TREE_STRING()											\
-    ShinyManager_outputTreeToString(&Shiny_instance)
+    ShinyManager_outputTreeToString(&shinyManagerInstance)
 
 #define PROFILE_GET_FLAT_STRING()											\
-    ShinyManager_outputFlatToString(&Shiny_instance)
+    ShinyManager_outputFlatToString(&shinyManagerInstance)
 #endif
 
 #define PROFILE_DESTROY()													\
-    ShinyManager_destroy(&Shiny_instance)
+    ShinyManager_destroy(&shinyManagerInstance)
 
 #define PROFILE_CLEAR()														\
-    ShinyManager_clear(&Shiny_instance)
+    ShinyManager_clear(&shinyManagerInstance)
 
 #define PROFILE_SORT_ZONES()												\
-    ShinyManager_sortZones(&Shiny_instance)
+    ShinyManager_sortZones(&shinyManagerInstance)
 
 
 /*---------------------------------------------------------------------------*/
 /* public preprocessors */
 
 #define PROFILE_GET_TOTAL_TICKS_CUR()										\
-    ShinyData_totalTicksCur(&Shiny_instance.rootZone.data)
+    ShinyData_totalTicksCur(&shinyManagerInstance.rootZone.data)
 
 #define PROFILE_GET_TOTAL_TICKS()											\
-    ShinyData_totalTicksAvg(&Shiny_instance.rootZone.data)
+    ShinyData_totalTicksAvg(&shinyManagerInstance.rootZone.data)
 
 #define PROFILE_GET_PROFILED_TICKS_CUR()									\
-    (Shiny_instance.rootZone.data.selfTicks.cur)
+    (shinyManagerInstance.rootZone.data.selfTicks.cur)
 
 #define PROFILE_GET_PROFILED_TICKS()										\
-    (Shiny_instance.rootZone.data.selfTicks.avg)
+    (shinyManagerInstance.rootZone.data.selfTicks.avg)
 
 #define PROFILE_GET_UNPROFILED_TICKS_CUR()									\
-    (Shiny_instance.rootZone.data.childTicks.cur)
+    (shinyManagerInstance.rootZone.data.childTicks.cur)
 
 #define PROFILE_GET_UNPROFILED_TICKS()										\
-    (Shiny_instance.rootZone.data.childTicks.avg)
+    (shinyManagerInstance.rootZone.data.childTicks.avg)
 
 #define PROFILE_GET_SHARED_TOTAL_TICKS_CUR(name)							\
     ShinyData_totalTicksCur(&(_PROFILE_ID_ZONE_SHARED(name).data))
@@ -85,18 +85,18 @@
 
 #define PROFILE_IS_SHARED_SELF_BELOW(name, floatfrom0to1)					\
     ShinyManager_isZoneSelfTimeBelow(										\
-        &Shiny_instance, _PROFILE_ID_ZONE_SHARED(name), floatfrom0to1)
+        &shinyManagerInstance, _PROFILE_ID_ZONE_SHARED(name), floatfrom0to1)
 
 #define PROFILE_IS_SHARED_TOTAL_BELOW(name, floatfrom0to1)					\
     ShinyManager_isZoneTotalTimeBelow(										\
-        &Shiny_instance, _PROFILE_ID_ZONE_SHARED(name), floatfrom0to1)
+        &shinyManagerInstance, _PROFILE_ID_ZONE_SHARED(name), floatfrom0to1)
 
 
 /*---------------------------------------------------------------------------*/
 /* public preprocessors */
 
 #define PROFILE_END()														\
-    ShinyManager_endCurNode(&Shiny_instance)
+    ShinyManager_endCurNode(&shinyManagerInstance)
 
 
 /*---------------------------------------------------------------------------*/
@@ -221,7 +221,7 @@
                                                                             \
     do {																	\
         static ShinyNodeCache cache = &_ShinyNode_dummy;					\
-        ShinyManager_lookupAndBeginNode(&Shiny_instance, &cache, &id);		\
+        ShinyManager_lookupAndBeginNode(&shinyManagerInstance, &cache, &id);		\
     } while(0)
 
 /*---------------------------------------------------------------------------*/
