@@ -29,13 +29,31 @@ extern "C" {
 /**
  * ShinyManager (and it's instance `Shiny_instance`) is a central object in Shiny.
  * 
- * At the beginning of the code region, which is going to be profiled
- * a static `ShinyZone` object is declared and then immediately passed to
- * `ShinyManager_lookupAndBeginNode()`. On a first call this will create
- * corresponding Node, attach Zone to it and attach both: Node and Zone
- * to the manager.
+ * It manages `ShinyZone` and `ShinyNode` objects. Particularly, it
+ * collects all zones linked to its `rootZone`. And it creates nodes
+ * as needed, assignes them to Zones and builds tree-structure out of
+ * them, which denotes call-tree or inclusion-tree. This tree is attached
+ * to `rootNode`.
  * 
- * On subsequent calls...
+ * As auxiliary objects `NodePool`s are managed by `ShinyManager`.
+ * 
+ * Also to keep track of correspondence between Node (as part of the
+ * tree) and Zone Manager maintains hashtable of "parent-node"-zone
+ * pairs. Memory used for it is pointed to by `_nodeTable` and methods
+ * for it are implemented directly in Manager.
+ * 
+ * At the beginning of each Zone the method `ShinyManager_lookupAndBeginNode()`
+ * is called. It creates new or finds existing node, which corresponds
+ * to current Zone in context of `Shiny_instance->_curNode` at the moment
+ * of invocation, makes it current and starts time recording for this node.
+ * This all happens as part of macro `PROFILE_BEGIN()`
+ * 
+ * At the end of the Zone the method `ShinyManager_endCurNode()` is called, which
+ * ends time recording in the current node. Used in macro `PROFILE_END()`
+ * 
+ * The function `ShinyManager_update()` calculates cumulative timing information
+ * from Nodes and assignes it to Zones. Used in macro `PROFILE_UPDATE()`.
+ * It should be called before outputing the profileing results.
  */
 
 /* TODO: Reorder fields to group them according to semantics. Don't forget reorder accordingly initializer in .c file. */
@@ -161,6 +179,25 @@ SHINY_INLINE void ShinyManager_beginNode(ShinyManager * self, ShinyNode * node) 
     self->_curNode = node;
 }
 
+/** This function is to be called at the beginning of the zone.
+ * 
+ * It will check, if nodeCache alrady has corresponding Node,
+ * i.e. the node for given Zone, which is created as child of
+ * `self->curNode`.
+ * 
+ * If yes, then it will just use this node, but if not, then it
+ * will try to lookup the node in its' node table and finally, if
+ * it will not be found, then it will create it.
+ * 
+ * Found or created node will be stored in the cache.
+ * 
+ * Note, that if execution hits the same zone in the same context
+ * again and again, then cache will be used and no table lookup
+ * is needed. But if the zone is hit from different context, then
+ * cache will contain wrong node, so the manager will need to look
+ * up proper node each time the context was changed.
+ * 
+ */
 SHINY_INLINE void ShinyManager_lookupAndBeginNode(
     ShinyManager * self, 
     ShinyNodeCache * nodeCache, 
