@@ -83,7 +83,7 @@ void UpdateAllCharacters() {
 		PROFILE_SHARED_BEGIN(Animations);
 		// do stuff
 		PROFILE_END();
-	PROFILE_END();
+    PROFILE_END();
 
 }
 
@@ -110,10 +110,10 @@ int main() {
 		DoPhysicsSimulation();
 		DrawWorldObjects();
 
-		PROFILE_UPDATE(); // update all profiles
+        PROFILE_UPDATE(); // update all profiles
 	}
 
-	PROFILE_OUTPUT(NULL); // print to terminal
+    PROFILE_OUTPUT(NULL); // print to terminal
 
 #ifdef _WIN32
 	system("pause");

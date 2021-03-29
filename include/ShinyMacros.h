@@ -14,7 +14,7 @@
 /* public preprocessors */
 
 #define PROFILE_UPDATE()													\
-    ShinyManager_update(&shinyManagerInstance)
+    shinyManager_update(&shinyManagerInstance)
 
 #define PROFILE_SET_DAMPING(floatfrom0to1)									\
     shinyManagerInstance.damping = (floatfrom0to1);
@@ -23,27 +23,27 @@
     (shinyManagerInstance.damping)
 
 #define PROFILE_OUTPUT(filename)											\
-    ShinyManager_output(&shinyManagerInstance, (filename))
+    shinyManager_output(&shinyManagerInstance, (filename))
 
 #define PROFILE_OUTPUT_STREAM(stream)										\
-    ShinyManager_outputToStream(&shinyManagerInstance, (stream))
+    shinyManager_outputToStream(&shinyManagerInstance, (stream))
 
 #ifdef __cplusplus
 #define PROFILE_GET_TREE_STRING()											\
-    ShinyManager_outputTreeToString(&shinyManagerInstance)
+    shinyManager_outputTreeToString(&shinyManagerInstance)
 
 #define PROFILE_GET_FLAT_STRING()											\
-    ShinyManager_outputFlatToString(&shinyManagerInstance)
+    shinyManager_outputFlatToString(&shinyManagerInstance)
 #endif
 
 #define PROFILE_DESTROY()													\
-    ShinyManager_destroy(&shinyManagerInstance)
+    shinyManager_destroy(&shinyManagerInstance)
 
 #define PROFILE_CLEAR()														\
-    ShinyManager_clear(&shinyManagerInstance)
+    shinyManager_clear(&shinyManagerInstance)
 
 #define PROFILE_SORT_ZONES()												\
-    ShinyManager_sortZones(&shinyManagerInstance)
+    shinyManager_sortZones(&shinyManagerInstance)
 
 
 /*---------------------------------------------------------------------------*/
@@ -84,11 +84,11 @@
 /* public preprocessors */
 
 #define PROFILE_IS_SHARED_SELF_BELOW(name, floatfrom0to1)					\
-    ShinyManager_isZoneSelfTimeBelow(										\
+    shinyManager_isZoneSelfTimeBelow(										\
         &shinyManagerInstance, _PROFILE_ID_ZONE_SHARED(name), floatfrom0to1)
 
 #define PROFILE_IS_SHARED_TOTAL_BELOW(name, floatfrom0to1)					\
-    ShinyManager_isZoneTotalTimeBelow(										\
+    shinyManager_isZoneTotalTimeBelow(										\
         &shinyManagerInstance, _PROFILE_ID_ZONE_SHARED(name), floatfrom0to1)
 
 
@@ -96,7 +96,7 @@
 /* public preprocessors */
 
 #define PROFILE_END()														\
-    ShinyManager_endCurNode(&shinyManagerInstance)
+    shinyManager_endCurrentNode(&shinyManagerInstance)
 
 
 /*---------------------------------------------------------------------------*/
@@ -209,6 +209,7 @@
 /*---------------------------------------------------------------------------*/
 /* internal preprocessor */
 
+/* TODO: This macro should be defined only in C++ */
 #define _PROFILE_BLOCK_DEFINE( id )											\
                                                                             \
     ShinyEndNodeOnDestruction SHINY_UNUSED id
@@ -221,7 +222,7 @@
                                                                             \
     do {																	\
         static ShinyNodeCache cache = &_ShinyNode_dummy;					\
-        ShinyManager_lookupAndBeginNode(&shinyManagerInstance, &cache, &id);		\
+        shinyManager_lookupAndBeginNode(&shinyManagerInstance, &cache, &id);		\
     } while(0)
 
 /*---------------------------------------------------------------------------*/

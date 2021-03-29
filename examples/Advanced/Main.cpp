@@ -67,8 +67,8 @@ int main() {
 	ExecuteCommand("clear");
 #endif
 
-	PROFILE_UPDATE(); // update all profiles
-	PROFILE_OUTPUT(NULL); // print to terminal
+    PROFILE_UPDATE(); // update all profiles
+    PROFILE_OUTPUT(NULL); // print to terminal
 
 #ifdef _WIN32
 	system("pause");
