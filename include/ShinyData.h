@@ -11,9 +11,15 @@
 extern "C" {
 #endif
 
+/**
+ * Part of `ShinyNode`. Contains latest timing data (after last "update").
+ *
+ * Particularly contains ticks spent inside node except enclosed nodes (aka `selfTicks`).
+ * Also contains number of entries into the node (`entryCount`).
+ */
 typedef struct {
-    uint32_t entryCount;
-    shinytick_t selfTicks;
+    uint32_t entryCount; /**< Number of entries to the node since last update. */
+    shinytick_t selfTicks; /**< Ticks spent in this node since last update excluding time spent in enclosed nodes. */
 } ShinyLastData;
 
 

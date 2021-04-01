@@ -16,23 +16,25 @@
 extern "C" {
 #endif
 
+/* TODO: Rename methods to start with small character. */
+/* TODO: Add documentation. */
 struct ShinyNode {
 
-    ShinyLastData _last;
+    ShinyLastData _last;     /**< Timing data since last "update". */
 
-    ShinyZone * zone;
-    ShinyNode * parent;
-    ShinyNode * nextSibling;
+    ShinyZone * zone;        /**< Zone corresponding to this node. */
 
-    ShinyNode * firstChild;
-    ShinyNode * lastChild;
+    ShinyNode * parent;      /**< Parent node of this node. */
+    ShinyNode * nextSibling; /**< Defines linked list of siblings in node tree. */
+    ShinyNode * firstChild;  /**< First element in the linked list of siblings of next level. */
+    ShinyNode * lastChild;   /**< Last element in the linked list of siblings of the next level. */
 
-    uint32_t childCount;
-    uint32_t entryLevel;
+    uint32_t childCount;     /**< Number of children. */
+    uint32_t entryLevel;     /**< Level of the node in the node tree (i.e. root hast 0, it's children 1 etc.). */
 
-    ShinyNodeCache * _cache; /**< seems to be unused */
+    ShinyNodeCache * _cache; /**< Back reference - used to clean it up, when the node is destroyed. */
 
-    ShinyData data;
+    ShinyData data;          /**< This is probably aggregated data (here it is stored during "update". */
 
 };
 
