@@ -52,9 +52,9 @@ void ShinyNode_updateTree(ShinyNode* first, float a_damping) {
 
 /*---------------------------------------------------------------------------*/
 
-void ShinyNode_updateTreeClean(ShinyNode* first) {
-    ShinyNodeState *top = NULL;
-    ShinyNode *node = first;
+void ShinyNode_updateTreeClean(ShinyNode * first) {
+    ShinyNodeState * top = NULL;
+    ShinyNode * node = first;
 
     for (;;) {
         do {

@@ -15,21 +15,25 @@ extern "C" {
 #endif
 
 
-typedef struct _ShinyNodeState {
-    ShinyNode * node;
-    int         zoneUpdating;
+struct ShinyNodeState;
+typedef  struct ShinyNodeState  ShinyNodeState;
 
-    struct _ShinyNodeState *_prev;
-} ShinyNodeState;
+struct ShinyNodeState {
+    ShinyNode      * node;
+    int              zoneUpdating;
+    ShinyNodeState * _previousState;
+};
 
 
-ShinyNodeState *ShinyNodeState_push(ShinyNodeState *a_top, ShinyNode *a_node);
+/** Create new State on top of `topState`, initialize it from `node` and return. */
+ShinyNodeState * ShinyNodeState_push(ShinyNodeState * topState, ShinyNode * node);
 
-ShinyNodeState *ShinyNodeState_pop(ShinyNodeState *a_top);
+/** Destroy given `topState` and return its "previous". */
+ShinyNodeState * ShinyNodeState_pop(ShinyNodeState * topState);
 
-ShinyNode *ShinyNodeState_finishAndGetNext(ShinyNodeState *self, float a_damping);
+ShinyNode * ShinyNodeState_finishAndGetNext(ShinyNodeState * self, float damping);
 
-ShinyNode *ShinyNodeState_finishAndGetNextClean(ShinyNodeState *self);
+ShinyNode * ShinyNodeState_finishAndGetNextClean(ShinyNodeState * self);
 
 
 #ifdef __cplusplus

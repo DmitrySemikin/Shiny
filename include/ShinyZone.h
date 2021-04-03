@@ -44,7 +44,8 @@ SHINY_INLINE void ShinyZone_uninit(ShinyZone * self) {
     self->next = NULL;
 }
 
-SHINY_API void ShinyZone_preUpdateChain(ShinyZone *first);
+/** Clear current values of `ShinyData` of all Zones in the chain starting from this one. */
+SHINY_API void ShinyZone_preUpdateChain(ShinyZone *startZone);
 SHINY_API void ShinyZone_updateChain(ShinyZone *first, float a_damping);
 SHINY_API void ShinyZone_updateChainClean(ShinyZone *first);
 

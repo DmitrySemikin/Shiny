@@ -111,20 +111,24 @@ void shinyManager_preLoad(ShinyManager *self) {
 
 /*---------------------------------------------------------------------------*/
 
-void shinyManager_update(ShinyManager *self) {
+void shinyManager_update(ShinyManager * self) {
 
     _shinyManager_appendTicksToCurNode(self);
     ShinyZone_preUpdateChain(&self->_firstZone);
 
     if (self->_firstUpdate || self->damping == 0) {
+
         self->_firstUpdate = FALSE;
         ShinyNode_updateTreeClean(&self->_rootNode);
         ShinyZone_updateChainClean(&self->_firstZone);
 
     } else {
+
         ShinyNode_updateTree(&self->_rootNode, self->damping);
         ShinyZone_updateChain(&self->_firstZone, self->damping);
+
     }
+
 }
 
 

@@ -36,33 +36,45 @@ typedef struct {
 
 
 typedef struct {
-    ShinyCountData entryCount;
-    ShinyTickData selfTicks;
-    ShinyTickData childTicks;
+    ShinyCountData entryCount; /**< Number of entries into this zone. */
+    ShinyTickData selfTicks;   /**< Time (ticks) spent in zone excluding enclosed zones. */
+    ShinyTickData childTicks;  /**< Time (ticks) spent in enclosed zones. */
 } ShinyData;
 
 
-SHINY_INLINE shinytick_t ShinyData_totalTicksCur(const ShinyData *self) {
+SHINY_INLINE shinytick_t shinyData_totalTicksCur(const ShinyData * self) {
     return self->selfTicks.cur + self->childTicks.cur;
 }
 
-SHINY_INLINE float ShinyData_totalTicksAvg(const ShinyData *self) {
+SHINY_INLINE float shinyData_totalTicksAvg(const ShinyData * self) {
     return self->selfTicks.avg + self->childTicks.avg;
 }
 
-SHINY_INLINE void ShinyData_computeAverage(ShinyData *self, float a_damping) {
-    self->entryCount.avg = self->entryCount.cur + a_damping * (self->entryCount.avg - self->entryCount.cur);
-    self->selfTicks.avg = self->selfTicks.cur + a_damping * (self->selfTicks.avg - self->selfTicks.cur);
-    self->childTicks.avg = self->childTicks.cur + a_damping * (self->childTicks.avg - self->childTicks.cur);
+/** Calculate new average values based on old average values, current values and damping.
+ *
+ * See also `shinyData_copyAverage()`, which does not take old average and
+ * dumping into account and just overwrites averages with current values.
+ */
+SHINY_INLINE void shinyData_computeAverage(ShinyData * self, float damping) {
+    self->entryCount.avg = self->entryCount.cur + damping * (self->entryCount.avg - self->entryCount.cur);
+    self->selfTicks.avg = self->selfTicks.cur + damping * (self->selfTicks.avg - self->selfTicks.cur);
+    self->childTicks.avg = self->childTicks.cur + damping * (self->childTicks.avg - self->childTicks.cur);
 }
 
-SHINY_INLINE void ShinyData_copyAverage(ShinyData *self) {
+/** Copy values of `entryCount`, `selfTicks` and `childTicks` from `cur` to `avg`.
+ *
+ * In contrast with `shinyData_computeAverage` it just overwrites average
+ * values with current ones (as if damping were 0). Used in "update clean"
+ * versions of methods, which used either when damping is 0 or when it is
+ * first update, i.e. there are no previous average values.
+ */
+SHINY_INLINE void shinyData_copyAverage(ShinyData * self) {
     self->entryCount.avg = (float) self->entryCount.cur;
     self->selfTicks.avg = (float) self->selfTicks.cur;
     self->childTicks.avg = (float) self->childTicks.cur;
 }
 
-SHINY_INLINE void ShinyData_clearAll(ShinyData *self) {
+SHINY_INLINE void shinyData_clearAll(ShinyData * self) {
     self->entryCount.cur = 0;
     self->entryCount.avg = 0;
     self->selfTicks.cur = 0;
@@ -71,7 +83,7 @@ SHINY_INLINE void ShinyData_clearAll(ShinyData *self) {
     self->childTicks.avg = 0;
 }
 
-SHINY_INLINE void ShinyData_clearCurrent(ShinyData *self) {
+SHINY_INLINE void shinyData_clearCurrent(ShinyData * self) {
     self->entryCount.cur = 0;
     self->selfTicks.cur = 0;
     self->childTicks.cur = 0;

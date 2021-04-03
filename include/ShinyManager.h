@@ -241,7 +241,7 @@ SHINY_INLINE int shinyManager_isZoneSelfTimeBelow(ShinyManager * self, ShinyZone
 
 SHINY_INLINE int shinyManager_isZoneTotalTimeBelow(ShinyManager * self, ShinyZone * zone, float percentage) {
     return percentage * (float) self->_firstZone.data.childTicks.cur
-           <= (float) ShinyData_totalTicksCur(&zone->data);
+           <= (float) shinyData_totalTicksCur(&zone->data);
 }
 
 /**/

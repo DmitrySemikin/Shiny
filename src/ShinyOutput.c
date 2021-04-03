@@ -52,7 +52,7 @@ SHINY_INLINE char* printHeader(char *output, const char *a_title) {
 /*---------------------------------------------------------------------------*/
 
 SHINY_INLINE char* printData(char *output, const ShinyData *a_data, float a_topercent) {
-    float totalTicksAvg = ShinyData_totalTicksAvg(a_data);
+    float totalTicksAvg = shinyData_totalTicksAvg(a_data);
     const ShinyTimeUnit *selfUnit = ShinyGetTimeUnit(a_data->selfTicks.avg);
     const ShinyTimeUnit *totalUnit = ShinyGetTimeUnit(totalTicksAvg);
 

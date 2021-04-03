@@ -16,11 +16,11 @@
 
 /*---------------------------------------------------------------------------*/
 
-void ShinyZone_preUpdateChain(ShinyZone *first) {
-    ShinyZone* zone = first;
+void ShinyZone_preUpdateChain(ShinyZone * startZone) {
+    ShinyZone * zone = startZone;
 
     while (zone) {
-        ShinyData_clearCurrent(&(zone->data));
+        shinyData_clearCurrent(&(zone->data));
         zone = zone->next;
     }
 }
@@ -32,7 +32,7 @@ void ShinyZone_updateChain(ShinyZone *first, float a_damping) {
     ShinyZone* zone = first;
 
     do {
-        ShinyData_computeAverage(&(zone->data), a_damping);
+        shinyData_computeAverage(&(zone->data), a_damping);
         zone = zone->next;
     } while (zone);
 }
@@ -44,7 +44,7 @@ void ShinyZone_updateChainClean(ShinyZone *first) {
     ShinyZone* zone = first;
 
     do {
-        ShinyData_copyAverage(&(zone->data));
+        shinyData_copyAverage(&(zone->data));
         zone = zone->next;
     } while (zone);
 }
