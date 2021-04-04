@@ -256,7 +256,7 @@ ShinyNode * _shinyManager_lookupNode(
     self->_nodeCount++;
 
     {
-        ShinyNode * newNode = ShinyNodePool_newItem(self->_lastNodePool);
+        ShinyNode * newNode = shinyNodePool_newItem(self->_lastNodePool);
         shinyNode_init(newNode, self->_currentNode, a_zone, a_cache);
 
         self->_nodeTable[currentIndex] = newNode;
@@ -291,7 +291,7 @@ ShinyNode * _shinyManager_createNode(
     ShinyNodeCache * nodeCache,
     ShinyZone * zone
 ) {
-    ShinyNode * newNode = ShinyNodePool_newItem(self->_lastNodePool);
+    ShinyNode * newNode = shinyNodePool_newItem(self->_lastNodePool);
     shinyNode_init(newNode, self->_currentNode, zone, nodeCache);
 
     self->_nodeCount++;
@@ -303,7 +303,7 @@ ShinyNode * _shinyManager_createNode(
 /*---------------------------------------------------------------------------*/
 
 void _shinyManager_createFirstNodePool(ShinyManager * self, uint32_t poolCapacity) {
-    self->_firstNodePool = ShinyNodePool_create(poolCapacity);
+    self->_firstNodePool = shinyNodePool_create(poolCapacity);
     self->_lastNodePool = self->_firstNodePool;
 }
 
@@ -311,7 +311,7 @@ void _shinyManager_createFirstNodePool(ShinyManager * self, uint32_t poolCapacit
 /*---------------------------------------------------------------------------*/
 
 void _shinyManager_createAdditionalNodePool(ShinyManager * self, uint32_t additionalPoolCapacity) {
-    ShinyNodePool * pPool = ShinyNodePool_create(additionalPoolCapacity);
+    ShinyNodePool * pPool = shinyNodePool_create(additionalPoolCapacity);
     self->_lastNodePool->nextPool = pPool;
     self->_lastNodePool = pPool;
 }
@@ -342,7 +342,7 @@ void _shinyManager_resizeNodeTable(ShinyManager * self, uint32_t newSlotCount) {
     currentNodePool = self->_firstNodePool;
     while (currentNodePool) {
 
-        ShinyNode * currentNode = ShinyNodePool_firstItem(currentNodePool);
+        ShinyNode * currentNode = shinyNodePool_firstItem(currentNodePool);
 
         while (currentNode != currentNodePool->_nextItem) {
             _shinyManager_insertNodeIntoTable(self, currentNode++);
@@ -366,7 +366,7 @@ void shinyManager_resetZones(ShinyManager * self) {
 
 void shinyManager_destroyNodes(ShinyManager * self) {
     if (self->_firstNodePool) {
-        ShinyNodePool_destroy(self->_firstNodePool);
+        shinyNodePool_destroy(self->_firstNodePool);
         self->_firstNodePool = NULL;
     }
 

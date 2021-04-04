@@ -18,7 +18,7 @@
 
 /*---------------------------------------------------------------------------*/
 
-ShinyNodePool * ShinyNodePool_create(uint32_t capacity) {
+ShinyNodePool * shinyNodePool_create(uint32_t capacity) {
 
     ShinyNodePool * pool =
         (ShinyNodePool*)malloc(sizeof(ShinyNodePool) + sizeof(ShinyNode) * (capacity - 1));
@@ -35,7 +35,7 @@ ShinyNodePool * ShinyNodePool_create(uint32_t capacity) {
 
 /*---------------------------------------------------------------------------*/
 
-uint32_t ShinyNodePool_memoryUsageChain(ShinyNodePool * firstPool) {
+uint32_t shinyNodePool_memoryUsageChain(ShinyNodePool * firstPool) {
 
     /* TODO: We can put first iteration into the loop. */
     uint32_t bytes = (uint32_t) ((char*) firstPool->endOfItems - (char*) firstPool);
@@ -52,9 +52,9 @@ uint32_t ShinyNodePool_memoryUsageChain(ShinyNodePool * firstPool) {
 
 /*---------------------------------------------------------------------------*/
 
-void ShinyNodePool_destroy(ShinyNodePool * self) {
+void shinyNodePool_destroy(ShinyNodePool * self) {
 
-    ShinyNode * currentNode = ShinyNodePool_firstItem(self);
+    ShinyNode * currentNode = shinyNodePool_firstItem(self);
     ShinyNode * lastNode = self->_nextItem;
 
     while (currentNode != lastNode) {
@@ -63,7 +63,7 @@ void ShinyNodePool_destroy(ShinyNodePool * self) {
 
     /* TODO: make this into a loop or a tail recursion */
     if (self->nextPool) {
-        ShinyNodePool_destroy(self->nextPool);
+        shinyNodePool_destroy(self->nextPool);
     }
 
     free(self);

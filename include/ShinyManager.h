@@ -166,7 +166,7 @@ SHINY_INLINE float shinyManager_tableUsage(const ShinyManager * self) {
 
 SHINY_INLINE uint32_t shinyManager_allocMemInBytes(const ShinyManager * self) {
     return self->_tableSize * sizeof(ShinyNode *)
-           + ((self->_firstNodePool) ? ShinyNodePool_memoryUsageChain(self->_firstNodePool) : 0);
+           + ((self->_firstNodePool) ? shinyNodePool_memoryUsageChain(self->_firstNodePool) : 0);
 }
 
 SHINY_INLINE void shinyManager_beginNode(ShinyManager * self, ShinyNode * node) {
