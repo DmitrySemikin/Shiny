@@ -70,12 +70,15 @@ ShinyNode * _shinyManager_dummyNodeTable[] = {NULL };
 /*---------------------------------------------------------------------------*/
 
 #if SHINY_COMPILER == SHINY_COMPILER_MSVC
-#	pragma warning (push)
-#	pragma warning (disable: 4311)
+    #pragma warning (push)
+    #pragma warning (disable: 4311)
+#elif defined(__GNUC__)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
 #endif
 
 /* primary hash function */
-SHINY_INLINE uint32_t _ShinyHashValueForNodeIndex(void * nodeParent, void * nodeZone) {
+SHINY_INLINE uint32_t _shinyHashValueForNodeIndex(void * nodeParent, void * nodeZone) {
 
     uint32_t a = (uint32_t) nodeParent + (uint32_t) nodeZone;
 
@@ -88,18 +91,20 @@ SHINY_INLINE uint32_t _ShinyHashValueForNodeIndex(void * nodeParent, void * node
  * secondary hash used as index offset: force it to be odd
  * so it's relatively prime to the power-of-two table size
  */
-SHINY_INLINE uint32_t _ShinyHashValueForNodeIndexOffset(uint32_t currentIndex) {
+SHINY_INLINE uint32_t _shinyHashValueForNodeIndexOffset(uint32_t currentIndex) {
     return ((currentIndex << 8) + (currentIndex >> 4)) | 1;
 }
 
 #if SHINY_COMPILER == SHINY_COMPILER_MSVC
-#	pragma warning (pop)
+    #pragma warning (pop)
+#elif defined(__GNUC__)
+    #pragma GCC diagnostic pop
 #endif
 
 
 /*---------------------------------------------------------------------------*/
 
-void shinyManager_preLoad(ShinyManager *self) {
+void shinyManager_preLoad(ShinyManager * self) {
     if (!self->_initialized) {
         _shinyManager_init(self);
 
@@ -134,7 +139,7 @@ void shinyManager_update(ShinyManager * self) {
 
 /*---------------------------------------------------------------------------*/
 
-void shinyManager_updateClean(ShinyManager *self) {
+void shinyManager_updateClean(ShinyManager * self) {
 
     _shinyManager_appendTicksToCurNode(self);
     ShinyZone_preUpdateChain(&self->_firstZone);
@@ -147,7 +152,7 @@ void shinyManager_updateClean(ShinyManager *self) {
 
 /*---------------------------------------------------------------------------*/
 
-void shinyManager_clear(ShinyManager *self) {
+void shinyManager_clear(ShinyManager * self) {
     shinyManager_destroy(self);
     shinyManager_preLoad(self);
 }
@@ -155,7 +160,7 @@ void shinyManager_clear(ShinyManager *self) {
 
 /*---------------------------------------------------------------------------*/
 
-void shinyManager_destroy(ShinyManager *self) {
+void shinyManager_destroy(ShinyManager * self) {
     shinyManager_destroyNodes(self);
     shinyManager_resetZones(self);
     _shinyManager_uninit(self);
@@ -174,7 +179,7 @@ ShinyNode * _shinyManager_lookupNode(
     ShinyNodeCache * a_cache,
     ShinyZone *      a_zone
 ) {
-    uint32_t currentHash = _ShinyHashValueForNodeIndex(self->_currentNode, a_zone);
+    uint32_t currentHash = _shinyHashValueForNodeIndex(self->_currentNode, a_zone);
     uint32_t currentIndex = currentHash & self->_tableMask;
     ShinyNode * foundNode = self->_nodeTable[currentIndex];
 
@@ -192,7 +197,7 @@ ShinyNode * _shinyManager_lookupNode(
         /* hash collision: */
 
         /* compute a secondary hash function for stepping */
-        step = _ShinyHashValueForNodeIndexOffset(currentHash);
+        step = _shinyHashValueForNodeIndexOffset(currentHash);
 
         for (;;) {
             _shinyManager_incLookup(self);
@@ -264,11 +269,11 @@ ShinyNode * _shinyManager_lookupNode(
 
 void _shinyManager_insertNodeIntoTable(ShinyManager * self, ShinyNode * node) {
 
-    uint32_t newNodeHash = _ShinyHashValueForNodeIndex(node->parent, node->zone);
+    uint32_t newNodeHash = _shinyHashValueForNodeIndex(node->parent, node->zone);
     uint32_t newNodeIndex = newNodeHash & self->_tableMask;
 
     if (self->_nodeTable[newNodeIndex]) {
-        uint32_t step = _ShinyHashValueForNodeIndexOffset(newNodeHash);
+        uint32_t step = _shinyHashValueForNodeIndexOffset(newNodeHash);
 
         while (self->_nodeTable[newNodeIndex]) {
             newNodeIndex = (newNodeIndex + step) & self->_tableMask;
@@ -283,11 +288,11 @@ void _shinyManager_insertNodeIntoTable(ShinyManager * self, ShinyNode * node) {
 
 ShinyNode * _shinyManager_createNode(
     ShinyManager * self, 
-    ShinyNodeCache * a_cache,
-    ShinyZone * a_pZone
+    ShinyNodeCache * nodeCache,
+    ShinyZone * zone
 ) {
     ShinyNode * newNode = ShinyNodePool_newItem(self->_lastNodePool);
-    ShinyNode_init(newNode, self->_currentNode, a_pZone, a_cache);
+    ShinyNode_init(newNode, self->_currentNode, zone, nodeCache);
 
     self->_nodeCount++;
     _shinyManager_insertNodeIntoTable(self, newNode);
@@ -305,7 +310,7 @@ void _shinyManager_createFirstNodePool(ShinyManager * self, uint32_t poolCapacit
 
 /*---------------------------------------------------------------------------*/
 
-void _shinyManager_createAdditionalNodePool(ShinyManager *self, uint32_t additionalPoolCapacity) {
+void _shinyManager_createAdditionalNodePool(ShinyManager * self, uint32_t additionalPoolCapacity) {
     ShinyNodePool * pPool = ShinyNodePool_create(additionalPoolCapacity);
     self->_lastNodePool->nextPool = pPool;
     self->_lastNodePool = pPool;
@@ -314,25 +319,25 @@ void _shinyManager_createAdditionalNodePool(ShinyManager *self, uint32_t additio
 
 /*---------------------------------------------------------------------------*/
 
-void _shinyManager_createNodeTable(ShinyManager * self, uint32_t a_count) {
+void _shinyManager_createNodeTable(ShinyManager * self, uint32_t slotCount) {
 
-    self->_tableSize = a_count;
-    self->_tableMask = a_count - 1;
+    self->_tableSize = slotCount;
+    self->_tableMask = slotCount - 1;
 
-    self->_nodeTable = (ShinyNodeTable*) malloc(sizeof(ShinyNode*) * a_count);
+    self->_nodeTable = (ShinyNodeTable*) malloc(sizeof(ShinyNode*) * slotCount);
 
-    memset(self->_nodeTable, 0, a_count * sizeof(ShinyNode*));
+    memset(self->_nodeTable, 0, slotCount * sizeof(ShinyNode*));
 }
 
 
 /*---------------------------------------------------------------------------*/
 
-void _shinyManager_resizeNodeTable(ShinyManager * self, uint32_t a_count) {
+void _shinyManager_resizeNodeTable(ShinyManager * self, uint32_t newSlotCount) {
 
     ShinyNodePool * currentNodePool;
 
     free(self->_nodeTable);
-    _shinyManager_createNodeTable(self, a_count);
+    _shinyManager_createNodeTable(self, newSlotCount);
 
     currentNodePool = self->_firstNodePool;
     while (currentNodePool) {
@@ -350,7 +355,7 @@ void _shinyManager_resizeNodeTable(ShinyManager * self, uint32_t a_count) {
 
 /*---------------------------------------------------------------------------*/
 
-void shinyManager_resetZones(ShinyManager *self) {
+void shinyManager_resetZones(ShinyManager * self) {
     ShinyZone_resetChain(&self->_firstZone);
     self->_lastZone = &self->_firstZone;
     self->_zoneCount = 1;
@@ -359,7 +364,7 @@ void shinyManager_resetZones(ShinyManager *self) {
 
 /*---------------------------------------------------------------------------*/
 
-void shinyManager_destroyNodes(ShinyManager *self) {
+void shinyManager_destroyNodes(ShinyManager * self) {
     if (self->_firstNodePool) {
         ShinyNodePool_destroy(self->_firstNodePool);
         self->_firstNodePool = NULL;
@@ -382,7 +387,7 @@ void shinyManager_destroyNodes(ShinyManager *self) {
 
 /*---------------------------------------------------------------------------*/
 
-const char* shinyManager_getOutputErrorString(ShinyManager *self) {
+const char* shinyManager_getOutputErrorString(ShinyManager * self) {
     if (self->_firstUpdate) return "!!! Profile data must first be updated !!!";
     else if (!self->_initialized) return "!!! No profiles where executed !!!";
     else return NULL;
@@ -396,12 +401,12 @@ const char* shinyManager_getOutputErrorString(ShinyManager *self) {
 #	pragma warning (disable: 4996)
 #endif
 
-int shinyManager_output(ShinyManager *self, const char *a_filename) {
-    if (!a_filename) {
+int shinyManager_output(ShinyManager * self, const char * filename) {
+    if (!filename) {
         shinyManager_outputToStream(self, stdout);
 
     } else {
-        FILE *file = fopen(a_filename, "w");
+        FILE *file = fopen(filename, "w");
         if (!file) return FALSE;
         shinyManager_outputToStream(self, file);
         fclose(file);
@@ -417,7 +422,7 @@ int shinyManager_output(ShinyManager *self, const char *a_filename) {
 
 /*---------------------------------------------------------------------------*/
 
-void shinyManager_outputToStream(ShinyManager *self, FILE *stream) {
+void shinyManager_outputToStream(ShinyManager * self, FILE * stream) {
     const char *error = shinyManager_getOutputErrorString(self);
 
     if (error) {

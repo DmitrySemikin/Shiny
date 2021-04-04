@@ -116,8 +116,9 @@ SHINY_INLINE void _shinyManager_appendTicksToCurNode(ShinyManager *self) {
 
 SHINY_API ShinyNode * _shinyManager_lookupNode(ShinyManager * self, ShinyNodeCache * nodeCache, ShinyZone * zone);
 
-SHINY_API void _shinyManager_createNodeTable(ShinyManager * self, uint32_t nodeSlotsCount);
-SHINY_API void _shinyManager_resizeNodeTable(ShinyManager * self, uint32_t newNodeSlotsCount);
+/** @param slotCount  Number of slots in the created table. Must be power of 2. */
+SHINY_API void _shinyManager_createNodeTable(ShinyManager * self, uint32_t slotCount);
+SHINY_API void _shinyManager_resizeNodeTable(ShinyManager * self, uint32_t newSlotCount);
 
 
 /** Create first node pool. Should only be called once on initialization. */
