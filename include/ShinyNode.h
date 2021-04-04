@@ -105,7 +105,7 @@ SHINY_INLINE int shinyNode_isDummy(ShinyNode * self) {
 SHINY_INLINE int shinyNode_isEqual(
         ShinyNode * self,
         const ShinyNode * parentNode,
-        const struct ShinyZone* zone
+        const struct ShinyZone * zone
 ) {
     return (self->parent == parentNode && self->zone == zone);
 }
