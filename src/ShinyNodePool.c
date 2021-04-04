@@ -58,7 +58,7 @@ void ShinyNodePool_destroy(ShinyNodePool * self) {
     ShinyNode * lastNode = self->_nextItem;
 
     while (currentNode != lastNode) {
-        ShinyNode_destroy(currentNode++);
+        shinyNode_destroy(currentNode++);
     }
 
     /* TODO: make this into a loop or a tail recursion */

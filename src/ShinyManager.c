@@ -124,12 +124,12 @@ void shinyManager_update(ShinyManager * self) {
     if (self->_firstUpdate || self->damping == 0) {
 
         self->_firstUpdate = FALSE;
-        ShinyNode_updateTreeClean(&self->_rootNode);
+        shinyNode_updateTreeClean(&self->_rootNode);
         ShinyZone_updateChainClean(&self->_firstZone);
 
     } else {
 
-        ShinyNode_updateTree(&self->_rootNode, self->damping);
+        shinyNode_updateTree(&self->_rootNode, self->damping);
         ShinyZone_updateChain(&self->_firstZone, self->damping);
 
     }
@@ -145,7 +145,7 @@ void shinyManager_updateClean(ShinyManager * self) {
     ShinyZone_preUpdateChain(&self->_firstZone);
 
     self->_firstUpdate = FALSE;
-    ShinyNode_updateTreeClean(&self->_rootNode);
+    shinyNode_updateTreeClean(&self->_rootNode);
     ShinyZone_updateChainClean(&self->_firstZone);
 }
 
@@ -190,7 +190,7 @@ ShinyNode * _shinyManager_lookupNode(
         uint32_t step;
 
         /* check that foundNode->_parent == self->_currentNode && foundNode->zone == zone */
-        if (ShinyNode_isEqual(foundNode, self->_currentNode, a_zone)) {
+        if (shinyNode_isEqual(foundNode, self->_currentNode, a_zone)) {
             return foundNode; /* found it! */
         }
 
@@ -207,7 +207,7 @@ ShinyNode * _shinyManager_lookupNode(
 
             if (!foundNode) {
                 break; /* found empty slot */
-            } else if (ShinyNode_isEqual(foundNode, self->_currentNode, a_zone)) {
+            } else if (shinyNode_isEqual(foundNode, self->_currentNode, a_zone)) {
                 return foundNode; /* found it! */
             }
         }
@@ -257,7 +257,7 @@ ShinyNode * _shinyManager_lookupNode(
 
     {
         ShinyNode * newNode = ShinyNodePool_newItem(self->_lastNodePool);
-        ShinyNode_init(newNode, self->_currentNode, a_zone, a_cache);
+        shinyNode_init(newNode, self->_currentNode, a_zone, a_cache);
 
         self->_nodeTable[currentIndex] = newNode;
         return newNode;
@@ -292,7 +292,7 @@ ShinyNode * _shinyManager_createNode(
     ShinyZone * zone
 ) {
     ShinyNode * newNode = ShinyNodePool_newItem(self->_lastNodePool);
-    ShinyNode_init(newNode, self->_currentNode, zone, nodeCache);
+    shinyNode_init(newNode, self->_currentNode, zone, nodeCache);
 
     self->_nodeCount++;
     _shinyManager_insertNodeIntoTable(self, newNode);

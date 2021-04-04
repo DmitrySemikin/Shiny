@@ -16,7 +16,6 @@
 extern "C" {
 #endif
 
-/* TODO: Rename methods to start with small character. */
 /* TODO: Add documentation. */
 struct ShinyNode {
 
@@ -35,18 +34,17 @@ struct ShinyNode {
     ShinyNodeCache * _cache; /**< Back reference - used to clean it up, when the node is destroyed. */
 
     ShinyData data;          /**< This is probably aggregated data (here it is stored during "update". */
-
 };
 
 
 /*---------------------------------------------------------------------------*/
 
-extern ShinyNode _ShinyNode_dummy;
+extern ShinyNode _shinyNode_dummy;
 
 
 /*---------------------------------------------------------------------------*/
 
-SHINY_INLINE void ShinyNode_addChild(ShinyNode * self,  ShinyNode * childNode) {
+SHINY_INLINE void shinyNode_addChild(ShinyNode * self, ShinyNode * childNode) {
     if (self->childCount++) {
         self->lastChild->nextSibling = childNode;
         self->lastChild = childNode;
@@ -57,7 +55,7 @@ SHINY_INLINE void ShinyNode_addChild(ShinyNode * self,  ShinyNode * childNode) {
     }
 }
 
-SHINY_INLINE void ShinyNode_init(
+SHINY_INLINE void shinyNode_init(
     ShinyNode * self, 
     ShinyNode * parentNode, 
     ShinyZone * zone, 
@@ -69,44 +67,58 @@ SHINY_INLINE void ShinyNode_init(
     self->parent = parentNode;
 
     self->entryLevel = parentNode->entryLevel + 1;
-    ShinyNode_addChild(parentNode, self);
+    shinyNode_addChild(parentNode, self);
 
     self->_cache = nodeCache;
 }
 
-SHINY_API void ShinyNode_updateTree(ShinyNode* self, float a_damping);
-SHINY_API void ShinyNode_updateTreeClean(ShinyNode* self);
+SHINY_API void shinyNode_updateTree(ShinyNode * self, float damping);
+SHINY_API void shinyNode_updateTreeClean(ShinyNode * self);
 
-SHINY_INLINE void ShinyNode_destroy(ShinyNode* self) {
-    *(self->_cache) = &_ShinyNode_dummy;
+SHINY_INLINE void shinyNode_destroy(ShinyNode * self) {
+    *(self->_cache) = &_shinyNode_dummy;
 }
 
-SHINY_INLINE void ShinyNode_appendTicks(ShinyNode * self, shinytick_t elapsedTicks) {
+SHINY_INLINE void shinyNode_appendTicks(ShinyNode * self, shinytick_t elapsedTicks) {
     self->_last.selfTicks += elapsedTicks;
 }
 
-SHINY_INLINE void ShinyNode_beginEntry(ShinyNode * self) {
+SHINY_INLINE void shinyNode_beginEntry(ShinyNode * self) {
     self->_last.entryCount++;
 }
 
-SHINY_INLINE int ShinyNode_isRoot(ShinyNode* self) {
+SHINY_INLINE int shinyNode_isRoot(ShinyNode * self) {
     return (self->entryLevel == 0);
 }
 
-SHINY_INLINE int ShinyNode_isDummy(ShinyNode* self) {
-    return (self == &_ShinyNode_dummy);
+SHINY_INLINE int shinyNode_isDummy(ShinyNode * self) {
+    return (self == &_shinyNode_dummy);
 }
 
-/** It is not really "isEqual", but rather "is child with this zone". */
-SHINY_INLINE int ShinyNode_isEqual(ShinyNode* self, const ShinyNode* a_parent, const struct ShinyZone* a_zone) {
-    return (self->parent == a_parent && self->zone == a_zone);
+/** It is not really "isEqual", but rather "is child with this zone".
+ *
+ *  Node's place in the node-tree is defined by it's parent (context)
+ *  and corresponding Zone, which it represents. So this function checks,
+ *  that this data stored in the given Node (`self`) matches other two
+ *  input parameters.
+ */
+SHINY_INLINE int shinyNode_isEqual(
+        ShinyNode * self,
+        const ShinyNode * parentNode,
+        const struct ShinyZone* zone
+) {
+    return (self->parent == parentNode && self->zone == zone);
 }
 
-SHINY_API const ShinyNode* ShinyNode_findNextInTree(const ShinyNode* self);
+SHINY_API const ShinyNode* shinyNode_findNextInTree(const ShinyNode * self);
 
-SHINY_API void ShinyNode_clear(ShinyNode* self);
+SHINY_API void shinyNode_clear(ShinyNode * self);
 
-SHINY_API void ShinyNode_enumerateNodes(const ShinyNode* a_node, void (*a_func)(const ShinyNode*));
+/** Apply given function to `startNode` and to all further siblings and children of it. */
+SHINY_API void shinyNode_enumerateNodes(
+        const ShinyNode * startNode,
+        void (*functionToApply)(const ShinyNode*)
+);
 
 #ifdef __cplusplus
 } /* end of extern "C" */
@@ -117,12 +129,24 @@ SHINY_API void ShinyNode_enumerateNodes(const ShinyNode* a_node, void (*a_func)(
 /* C++ API */
 #ifdef __cplusplus
 
+/** Apply given `methodToApply` to `targetObject` for given `startNode` and all its further siblings and children
+ *
+ * Note, that `targetObject` does not change, when we navigate from one node to another.
+ */
 template <class T>
-void ShinyNode_enumerateNodes(const ShinyNode* a_node, T* a_this, void (T::*a_func)(const ShinyNode*)) {
-    (a_this->*a_func)(a_node);
+void shinyNode_enumerateNodes(
+        const ShinyNode * startNode,
+        T * targetObject,
+        void (T::*methodToApply)(const ShinyNode*)
+) {
+    (targetObject->*methodToApply)(startNode);
 
-    if (a_node->firstChild) ShinyNode_enumerateNodes(a_node->firstChild, a_this, a_func);
-    if (a_node->nextSibling) ShinyNode_enumerateNodes(a_node->nextSibling, a_this, a_func);
+    if (startNode->firstChild) {
+        shinyNode_enumerateNodes(startNode->firstChild, targetObject, methodToApply);
+    }
+    if (startNode->nextSibling) {
+        shinyNode_enumerateNodes(startNode->nextSibling, targetObject, methodToApply);
+    }
 }
 
 #endif /* __cplusplus */

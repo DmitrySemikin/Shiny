@@ -64,7 +64,7 @@ ShinyNode* ShinyNodeState_finishAndGetNext(ShinyNodeState *self, float a_damping
 
     shinyData_computeAverage(&node->data, a_damping);
 
-    if (!ShinyNode_isRoot(node))
+    if (!shinyNode_isRoot(node))
         node->parent->data.childTicks.cur += node->data.selfTicks.cur + node->data.childTicks.cur;
 
     return node->nextSibling;
@@ -84,7 +84,7 @@ ShinyNode* ShinyNodeState_finishAndGetNextClean(ShinyNodeState * self) {
 
     shinyData_copyAverage(&node->data);
 
-    if (!ShinyNode_isRoot(node))
+    if (!shinyNode_isRoot(node))
         node->parent->data.childTicks.cur += node->data.selfTicks.cur + node->data.childTicks.cur;
 
     return node->nextSibling;

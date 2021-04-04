@@ -110,7 +110,7 @@ SHINY_INLINE void _shinyManager_appendTicksToCurNode(ShinyManager *self) {
     shinytick_t curTick;
     ShinyGetTicks(&curTick);
 
-    ShinyNode_appendTicks(self->_currentNode, curTick - self->_lastTick);
+    shinyNode_appendTicks(self->_currentNode, curTick - self->_lastTick);
     self->_lastTick = curTick;
 }
 
@@ -142,7 +142,7 @@ SHINY_INLINE void _shinyManager_init(ShinyManager * self) {
 SHINY_INLINE void _shinyManager_uninit(ShinyManager * self) {
     self->_initialized = FALSE;
 
-    ShinyNode_clear(&self->_rootNode);
+    shinyNode_clear(&self->_rootNode);
     self->_rootNode.parent = &self->_rootNode;
     self->_rootNode.zone = &self->_firstZone;
 }
@@ -170,7 +170,7 @@ SHINY_INLINE uint32_t shinyManager_allocMemInBytes(const ShinyManager * self) {
 }
 
 SHINY_INLINE void shinyManager_beginNode(ShinyManager * self, ShinyNode * node) {
-    ShinyNode_beginEntry(node);
+    shinyNode_beginEntry(node);
 
     _shinyManager_appendTicksToCurNode(self);
     self->_currentNode = node;
@@ -249,7 +249,7 @@ SHINY_INLINE int shinyManager_isZoneTotalTimeBelow(ShinyManager * self, ShinyZon
 
 /** Call given function on each Node. */
 SHINY_INLINE void shinyManager_enumerateNodes(ShinyManager * self, void (*functionToCall)(const ShinyNode*)) {
-    ShinyNode_enumerateNodes(&self->_rootNode, functionToCall);
+    shinyNode_enumerateNodes(&self->_rootNode, functionToCall);
 }
 
 /** Call given function on each Zone. */
@@ -287,7 +287,7 @@ template <class T> void shinyManager_enumerateNodes(
         T * targetInstance,
         void (T::*methodToCall)(const ShinyNode*)
 ) {
-    ShinyNode_enumerateNodes(&self->_rootNode, targetInstance, methodToCall);
+    shinyNode_enumerateNodes(&self->_rootNode, targetInstance, methodToCall);
 }
 
 /** Call given method on given targetInstance passing as argument this zone and then all zones linked to it. */

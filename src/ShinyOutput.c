@@ -140,7 +140,7 @@ void ShinyPrintNodes(char* output, const ShinyNode *a_root) {
     for (;;) {
         output = printNode(output, node, fTicksToPc);
 
-        node = ShinyNode_findNextInTree(node);
+        node = shinyNode_findNextInTree(node);
         if (node) {
             (*output++) = '\n';
         } else {

@@ -221,7 +221,7 @@
 #define _PROFILE_ZONE_BEGIN( id )											\
                                                                             \
     do {																	\
-        static ShinyNodeCache cache = &_ShinyNode_dummy;					\
+        static ShinyNodeCache cache = &_shinyNode_dummy;					\
         shinyManager_lookupAndBeginNode(&shinyManagerInstance, &cache, &id);		\
     } while(0)
 

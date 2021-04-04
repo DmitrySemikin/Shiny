@@ -17,7 +17,7 @@
 
 /*---------------------------------------------------------------------------*/
 
-ShinyNode _ShinyNode_dummy = {
+ShinyNode _shinyNode_dummy = {
     /* _last = */ { 0, 0 },
     /* zone = */ NULL,
     /* parent = */ NULL,
@@ -29,9 +29,9 @@ ShinyNode _ShinyNode_dummy = {
 
 /*---------------------------------------------------------------------------*/
 
-void ShinyNode_updateTree(ShinyNode* first, float a_damping) {
+void shinyNode_updateTree(ShinyNode* self, float a_damping) {
     ShinyNodeState *top = NULL;
-    ShinyNode *node = first;
+    ShinyNode *node = self;
 
     for (;;) {
         do {
@@ -52,9 +52,9 @@ void ShinyNode_updateTree(ShinyNode* first, float a_damping) {
 
 /*---------------------------------------------------------------------------*/
 
-void ShinyNode_updateTreeClean(ShinyNode * first) {
+void shinyNode_updateTreeClean(ShinyNode * self) {
     ShinyNodeState * top = NULL;
-    ShinyNode * node = first;
+    ShinyNode * node = self;
 
     for (;;) {
         do {
@@ -75,7 +75,7 @@ void ShinyNode_updateTreeClean(ShinyNode * first) {
 
 /*---------------------------------------------------------------------------*/
 
-const ShinyNode* ShinyNode_findNextInTree(const ShinyNode* self) {
+const ShinyNode* shinyNode_findNextInTree(const ShinyNode* self) {
     if (self->firstChild) {
         return self->firstChild;
 
@@ -85,7 +85,7 @@ const ShinyNode* ShinyNode_findNextInTree(const ShinyNode* self) {
     } else {
         ShinyNode* pParent = self->parent;
 
-        while (!ShinyNode_isRoot(pParent)) {
+        while (!shinyNode_isRoot(pParent)) {
             if (pParent->nextSibling) return pParent->nextSibling;
             else pParent = pParent->parent;
         }
@@ -97,18 +97,18 @@ const ShinyNode* ShinyNode_findNextInTree(const ShinyNode* self) {
 
 /*---------------------------------------------------------------------------*/
 
-void ShinyNode_clear(ShinyNode* self) {
+void shinyNode_clear(ShinyNode* self) {
     memset(self, 0, sizeof(ShinyNode));
 }
 
 
 /*---------------------------------------------------------------------------*/
 
-void ShinyNode_enumerateNodes(const ShinyNode* a_node, void (*a_func)(const ShinyNode*)) {
+void shinyNode_enumerateNodes(const ShinyNode* a_node, void (*a_func)(const ShinyNode*)) {
     a_func(a_node);
 
-    if (a_node->firstChild) ShinyNode_enumerateNodes(a_node->firstChild, a_func);
-    if (a_node->nextSibling) ShinyNode_enumerateNodes(a_node->nextSibling, a_func);
+    if (a_node->firstChild) shinyNode_enumerateNodes(a_node->firstChild, a_func);
+    if (a_node->nextSibling) shinyNode_enumerateNodes(a_node->nextSibling, a_func);
 }
 
 #endif /* SHINY_IS_COMPILED */
