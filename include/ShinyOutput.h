@@ -16,14 +16,14 @@ extern "C" {
 #endif
 
 
-SHINY_API int ShinyPrintNodesSize(uint32_t a_count);
-SHINY_API int ShinyPrintZonesSize(uint32_t a_count);
+SHINY_API int shinyPrintNodesSize(uint32_t count);
+SHINY_API int shinyPrintZonesSize(uint32_t count);
 
-SHINY_API void ShinyPrintANode(char *output, const ShinyNode *a_node, const ShinyNode *a_root);
-SHINY_API void ShinyPrintAZone(char *output, const ShinyZone *a_zone, const ShinyZone *a_root);
+SHINY_API void shinyPrintANode(char * output, const ShinyNode * node, const ShinyNode * root);
+SHINY_API void shinyPrintAZone(char * output, const ShinyZone * zone, const ShinyZone * root);
 
-SHINY_API void ShinyPrintNodes(char *output, const ShinyNode *a_root);
-SHINY_API void ShinyPrintZones(char *output, const ShinyZone *a_root);
+SHINY_API void shinyPrintNodes(char * output, const ShinyNode * root);
+SHINY_API void shinyPrintZones(char * output, const ShinyZone * root);
 
 
 #ifdef __cplusplus
@@ -40,15 +40,15 @@ SHINY_API void ShinyPrintZones(char *output, const ShinyZone *a_root);
 
 SHINY_INLINE std::string shinyNodesToString(const ShinyNode *a_root, uint32_t a_count) {
     std::string str;
-    str.resize(ShinyPrintNodesSize(a_count) - 1);
-    ShinyPrintNodes(&str[0], a_root);
+    str.resize(shinyPrintNodesSize(a_count) - 1);
+    shinyPrintNodes(&str[0], a_root);
     return str;
 }
 
 SHINY_INLINE std::string shinyZonesToString(const ShinyZone *a_root, uint32_t a_count) {
     std::string str;
-    str.resize(ShinyPrintZonesSize(a_count) - 1);
-    ShinyPrintZones(&str[0], a_root);
+    str.resize(shinyPrintZonesSize(a_count) - 1);
+    shinyPrintZones(&str[0], a_root);
     return str;
 }
 

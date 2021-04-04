@@ -435,9 +435,9 @@ void shinyManager_outputToStream(ShinyManager * self, FILE * stream) {
     shinyManager_sortZones(self);
 
     {
-        int size = ShinyPrintZonesSize(self->_zoneCount);
+        int size = shinyPrintZonesSize(self->_zoneCount);
         char *buffer = (char*) malloc(size);
-        ShinyPrintZones(buffer, &self->_firstZone);
+        shinyPrintZones(buffer, &self->_firstZone);
         fwrite(buffer, 1, size - 1, stream);
         fwrite("\n\n", 1, 2, stream);
         free(buffer);
@@ -446,9 +446,9 @@ void shinyManager_outputToStream(ShinyManager * self, FILE * stream) {
 
 #if SHINY_OUTPUT_MODE & SHINY_OUTPUT_MODE_TREE
     {
-        int size = ShinyPrintNodesSize(self->_nodeCount);
+        int size = shinyPrintNodesSize(self->_nodeCount);
         char *buffer = (char*) malloc(size);
-        ShinyPrintNodes(buffer, &self->_rootNode);
+        shinyPrintNodes(buffer, &self->_rootNode);
         fwrite(buffer, 1, size - 1, stream);
         fwrite("\n\n", 1, 2, stream);
         free(buffer);
