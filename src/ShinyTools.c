@@ -21,24 +21,24 @@
 
 /*---------------------------------------------------------------------------*/
 
-const ShinyTimeUnit* ShinyGetTimeUnit(float ticks) {
+const ShinyTimeUnit* shinyGetTimeUnit(float ticks) {
     static ShinyTimeUnit units[4] = { 0 };
 
     if (units[0].tickFreq == 0) { /* auto initialize first time */
-        units[0].tickFreq = ShinyGetTickFreq() / 1.0f;
-        units[0].invTickFreq = ShinyGetTickInvFreq() * 1.0f;
+        units[0].tickFreq = shinyGetTickFreq() / 1.0f;
+        units[0].invTickFreq = shinyGetTickInvFreq() * 1.0f;
         units[0].suffix = "s";
 
-        units[1].tickFreq = ShinyGetTickFreq() / 1000.0f;
-        units[1].invTickFreq = ShinyGetTickInvFreq() * 1000.0f;
+        units[1].tickFreq = shinyGetTickFreq() / 1000.0f;
+        units[1].invTickFreq = shinyGetTickInvFreq() * 1000.0f;
         units[1].suffix = "ms";
 
-        units[2].tickFreq = ShinyGetTickFreq() / 1000000.0f;
-        units[2].invTickFreq = ShinyGetTickInvFreq() * 1000000.0f;
+        units[2].tickFreq = shinyGetTickFreq() / 1000000.0f;
+        units[2].invTickFreq = shinyGetTickInvFreq() * 1000000.0f;
         units[2].suffix = "us";
 
-        units[3].tickFreq = ShinyGetTickFreq() / 1000000000.0f;
-        units[3].invTickFreq = ShinyGetTickInvFreq() * 1000000000.0f;
+        units[3].tickFreq = shinyGetTickFreq() / 1000000000.0f;
+        units[3].invTickFreq = shinyGetTickInvFreq() * 1000000000.0f;
         units[3].suffix = "ns";
     }
 
@@ -53,8 +53,8 @@ const ShinyTimeUnit* ShinyGetTimeUnit(float ticks) {
 
 #if PLATFORM_TYPE == PLATFORM_TYPE_WINDOWS
 
-void ShinyGetTicks(shinytick_t *p) {
-    QueryPerformanceCounter((LARGE_INTEGER*)(p));
+void ShinyGetTicks(shinytick_t * ticks) {
+    QueryPerformanceCounter((LARGE_INTEGER*)(ticks));
 }
 
 shinytick_t ShinyGetTickFreq(void) {
@@ -75,18 +75,18 @@ float ShinyGetTickInvFreq(void) {
 
 #if PLATFORM_TYPE == PLATFORM_TYPE_POSIX
 
-void ShinyGetTicks(shinytick_t *p) {
+void shinyGetTicks(shinytick_t * ticks) {
     struct timeval time;
     gettimeofday(&time, NULL);
 
-    *p = time.tv_sec * 1000000 + time.tv_usec;
+    *ticks = time.tv_sec * 1000000 + time.tv_usec;
 }
 
-shinytick_t ShinyGetTickFreq(void) {
+shinytick_t shinyGetTickFreq(void) {
     return 1000000;
 }
 
-float ShinyGetTickInvFreq(void) {
+float shinyGetTickInvFreq(void) {
     return 1.0f / 1000000.0f;
 }
 

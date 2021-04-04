@@ -18,13 +18,13 @@ typedef struct {
 } ShinyTimeUnit;
 
 
-SHINY_API const ShinyTimeUnit *ShinyGetTimeUnit(float ticks);
+SHINY_API const ShinyTimeUnit * shinyGetTimeUnit(float ticks);
 
-SHINY_API void ShinyGetTicks(shinytick_t *p);
+SHINY_API void shinyGetTicks(shinytick_t * ticks);
 
-SHINY_API shinytick_t ShinyGetTickFreq(void);
+SHINY_API shinytick_t shinyGetTickFreq(void);
 
-SHINY_API float ShinyGetTickInvFreq(void);
+SHINY_API float shinyGetTickInvFreq(void);
 
 #ifdef __cplusplus
 } // extern "C"

@@ -108,7 +108,7 @@ extern ShinyManager shinyManagerInstance;
 
 SHINY_INLINE void _shinyManager_appendTicksToCurNode(ShinyManager *self) {
     shinytick_t curTick;
-    ShinyGetTicks(&curTick);
+    shinyGetTicks(&curTick);
 
     shinyNode_appendTicks(self->_currentNode, curTick - self->_lastTick);
     self->_lastTick = curTick;
@@ -136,7 +136,7 @@ SHINY_INLINE void _shinyManager_init(ShinyManager * self) {
 
     self->_rootNode._last.entryCount = 1;
     self->_rootNode._last.selfTicks = 0;
-    ShinyGetTicks(&self->_lastTick);
+    shinyGetTicks(&self->_lastTick);
 }
 
 SHINY_INLINE void _shinyManager_uninit(ShinyManager * self) {
