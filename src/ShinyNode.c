@@ -35,13 +35,13 @@ void shinyNode_updateTree(ShinyNode* self, float a_damping) {
 
     for (;;) {
         do {
-            top = ShinyNodeState_push(top, node);
+            top = shinyNodeState_push(top, node);
             node = node->firstChild;
         } while (node);
 
         for (;;) {
-            node = ShinyNodeState_finishAndGetNext(top, a_damping);
-            top = ShinyNodeState_pop(top);
+            node = shinyNodeState_finishAndGetNext(top, a_damping);
+            top = shinyNodeState_pop(top);
 
             if (node) break;
             else if (!top) return;
@@ -58,13 +58,13 @@ void shinyNode_updateTreeClean(ShinyNode * self) {
 
     for (;;) {
         do {
-            top = ShinyNodeState_push(top, node);
+            top = shinyNodeState_push(top, node);
             node = node->firstChild;
         } while (node);
 
         for (;;) {
-            node = ShinyNodeState_finishAndGetNextClean(top);
-            top = ShinyNodeState_pop(top);
+            node = shinyNodeState_finishAndGetNextClean(top);
+            top = shinyNodeState_pop(top);
 
             if (node) break;
             else if (!top) return;

@@ -17,7 +17,7 @@
 
 /*---------------------------------------------------------------------------*/
 
-ShinyNodeState * ShinyNodeState_push(ShinyNodeState * topState, ShinyNode * node) {
+ShinyNodeState * shinyNodeState_push(ShinyNodeState * topState, ShinyNode * node) {
     ShinyZone * zone = node->zone;
     ShinyNodeState * self = (ShinyNodeState*) malloc(sizeof(ShinyNodeState));
     self->node = node;
@@ -45,15 +45,15 @@ ShinyNodeState * ShinyNodeState_push(ShinyNodeState * topState, ShinyNode * node
 
 /*---------------------------------------------------------------------------*/
 
-ShinyNodeState * ShinyNodeState_pop(ShinyNodeState * top) {
-    ShinyNodeState * previousState = top->_previousState;
-    free(top);
+ShinyNodeState * shinyNodeState_pop(ShinyNodeState * topState) {
+    ShinyNodeState * previousState = topState->_previousState;
+    free(topState);
     return previousState;
 }
 
 /*---------------------------------------------------------------------------*/
 
-ShinyNode* ShinyNodeState_finishAndGetNext(ShinyNodeState *self, float a_damping) {
+ShinyNode* shinyNodeState_finishAndGetNext(ShinyNodeState * self, float damping) {
     ShinyNode *node = self->node;
     ShinyZone *zone = node->zone;
 
@@ -62,7 +62,7 @@ ShinyNode* ShinyNodeState_finishAndGetNext(ShinyNodeState *self, float a_damping
         zone->zoneState = SHINY_ZONE_STATE_INITIALIZED;
     }
 
-    shinyData_computeAverage(&node->data, a_damping);
+    shinyData_computeAverage(&node->data, damping);
 
     if (!shinyNode_isRoot(node))
         node->parent->data.childTicks.cur += node->data.selfTicks.cur + node->data.childTicks.cur;
@@ -73,7 +73,7 @@ ShinyNode* ShinyNodeState_finishAndGetNext(ShinyNodeState *self, float a_damping
 
 /*---------------------------------------------------------------------------*/
 
-ShinyNode* ShinyNodeState_finishAndGetNextClean(ShinyNodeState * self) {
+ShinyNode* shinyNodeState_finishAndGetNextClean(ShinyNodeState * self) {
     ShinyNode * node = self->node;
     ShinyZone * zone = node->zone;
 

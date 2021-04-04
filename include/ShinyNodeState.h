@@ -26,14 +26,14 @@ struct ShinyNodeState {
 
 
 /** Create new State on top of `topState`, initialize it from `node` and return. */
-ShinyNodeState * ShinyNodeState_push(ShinyNodeState * topState, ShinyNode * node);
+ShinyNodeState * shinyNodeState_push(ShinyNodeState * topState, ShinyNode * node);
 
 /** Destroy given `topState` and return its "previous". */
-ShinyNodeState * ShinyNodeState_pop(ShinyNodeState * topState);
+ShinyNodeState * shinyNodeState_pop(ShinyNodeState * topState);
 
-ShinyNode * ShinyNodeState_finishAndGetNext(ShinyNodeState * self, float damping);
+ShinyNode * shinyNodeState_finishAndGetNext(ShinyNodeState * self, float damping);
 
-ShinyNode * ShinyNodeState_finishAndGetNextClean(ShinyNodeState * self);
+ShinyNode * shinyNodeState_finishAndGetNextClean(ShinyNodeState * self);
 
 
 #ifdef __cplusplus
