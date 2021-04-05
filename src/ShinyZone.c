@@ -16,7 +16,7 @@
 
 /*---------------------------------------------------------------------------*/
 
-void ShinyZone_preUpdateChain(ShinyZone * startZone) {
+void shinyZone_preUpdateChain(ShinyZone * startZone) {
     ShinyZone * zone = startZone;
 
     while (zone) {
@@ -28,11 +28,11 @@ void ShinyZone_preUpdateChain(ShinyZone * startZone) {
 
 /*---------------------------------------------------------------------------*/
 
-void ShinyZone_updateChain(ShinyZone *first, float a_damping) {
-    ShinyZone* zone = first;
+void shinyZone_updateChain(ShinyZone * startZone, float damping) {
+    ShinyZone * zone = startZone;
 
     do {
-        shinyData_computeAverage(&(zone->data), a_damping);
+        shinyData_computeAverage(&(zone->data), damping);
         zone = zone->next;
     } while (zone);
 }
@@ -40,8 +40,8 @@ void ShinyZone_updateChain(ShinyZone *first, float a_damping) {
 
 /*---------------------------------------------------------------------------*/
 
-void ShinyZone_updateChainClean(ShinyZone *first) {
-    ShinyZone* zone = first;
+void shinyZone_updateChainClean(ShinyZone * startZone) {
+    ShinyZone * zone = startZone;
 
     do {
         shinyData_copyAverage(&(zone->data));
@@ -52,8 +52,9 @@ void ShinyZone_updateChainClean(ShinyZone *first) {
 
 /*---------------------------------------------------------------------------*/
 
-void ShinyZone_resetChain(ShinyZone *first) {
-    ShinyZone* zone = first, *temp;
+void shinyZone_resetChain(ShinyZone * startZone) {
+    ShinyZone * zone = startZone;
+    ShinyZone * temp;
 
     do {
         zone->zoneState = SHINY_ZONE_STATE_HIDDEN;
@@ -73,9 +74,9 @@ void ShinyZone_resetChain(ShinyZone *first) {
    Modified by Aidin Abedi
 */
 
-ShinyZone* ShinyZone_sortChain(ShinyZone **first) /* return ptr to last zone */
+ShinyZone * shinyZone_sortChain(ShinyZone ** startZone) /* return ptr to last zone */
 {
-    ShinyZone *p = *first;
+    ShinyZone * p = *startZone;
 
     unsigned base;
     unsigned long block_size;
@@ -134,7 +135,7 @@ ShinyZone* ShinyZone_sortChain(ShinyZone **first) /* return ptr to last zone */
                     chosen_tape = tape0;
                     n0--;
                 }
-                else if (ShinyZone_compare(tape1->first, tape0->first) > 0)
+                else if (shinyZone_compare(tape1->first, tape0->first) > 0)
                 {
                     chosen_tape = tape1;
                     n1--;
@@ -159,7 +160,7 @@ ShinyZone* ShinyZone_sortChain(ShinyZone **first) /* return ptr to last zone */
 
     if (tape[base].count > 1L) {
         ShinyZone* last = tape[base].last;
-        *first = tape[base].first;
+        *startZone = tape[base].first;
         last->next = NULL;
         return last;
 
@@ -171,17 +172,19 @@ ShinyZone* ShinyZone_sortChain(ShinyZone **first) /* return ptr to last zone */
 
 /*---------------------------------------------------------------------------*/
 
-void ShinyZone_clear(ShinyZone* self) {
+void shinyZone_clear(ShinyZone * self) {
     memset(self, 0, sizeof(ShinyZone));
 }
 
 
 /*---------------------------------------------------------------------------*/
 
-void ShinyZone_enumerateZones(const ShinyZone* a_zone, void (*a_func)(const ShinyZone*)) {
-    a_func(a_zone);
+void shinyZone_enumerateZones(const ShinyZone * startZone, void (*functionToApply)(const ShinyZone*)) {
+    functionToApply(startZone);
 
-    if (a_zone->next) ShinyZone_enumerateZones(a_zone->next, a_func);
+    if (startZone->next) {
+        shinyZone_enumerateZones(startZone->next, functionToApply);
+    }
 }
 
 #endif /* SHINY_IS_COMPILED */

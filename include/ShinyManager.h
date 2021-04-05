@@ -226,7 +226,7 @@ SHINY_API void shinyManager_destroy(ShinyManager * self);
 
 SHINY_INLINE void shinyManager_sortZones(ShinyManager * self) {
     if (self->_firstZone.next) {
-        self->_lastZone = ShinyZone_sortChain(&self->_firstZone.next);
+        self->_lastZone = shinyZone_sortChain(&self->_firstZone.next);
     }
 }
 
@@ -254,7 +254,7 @@ SHINY_INLINE void shinyManager_enumerateNodes(ShinyManager * self, void (*functi
 
 /** Call given function on each Zone. */
 SHINY_INLINE void shinyManager_enumerateZones(ShinyManager * self, void (*functionToCall)(const ShinyZone*)) {
-    ShinyZone_enumerateZones(&self->_firstZone, functionToCall);
+    shinyZone_enumerateZones(&self->_firstZone, functionToCall);
 }
 
 #ifdef __cplusplus
@@ -296,7 +296,7 @@ template <class T> void shinyManager_enumerateZones(
         T * targetInstance,
         void (T::*methodToCall)(const ShinyZone*)
 ) {
-    ShinyZone_enumerateZones(&self->_firstZone, targetInstance, methodToCall);
+    shinyZone_enumerateZones(&self->_firstZone, targetInstance, methodToCall);
 }
 
 class ShinyEndNodeOnDestruction {

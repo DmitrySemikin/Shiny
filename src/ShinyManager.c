@@ -119,18 +119,18 @@ void shinyManager_preLoad(ShinyManager * self) {
 void shinyManager_update(ShinyManager * self) {
 
     _shinyManager_appendTicksToCurNode(self);
-    ShinyZone_preUpdateChain(&self->_firstZone);
+    shinyZone_preUpdateChain(&self->_firstZone);
 
     if (self->_firstUpdate || self->damping == 0) {
 
         self->_firstUpdate = FALSE;
         shinyNode_updateTreeClean(&self->_rootNode);
-        ShinyZone_updateChainClean(&self->_firstZone);
+        shinyZone_updateChainClean(&self->_firstZone);
 
     } else {
 
         shinyNode_updateTree(&self->_rootNode, self->damping);
-        ShinyZone_updateChain(&self->_firstZone, self->damping);
+        shinyZone_updateChain(&self->_firstZone, self->damping);
 
     }
 
@@ -142,11 +142,11 @@ void shinyManager_update(ShinyManager * self) {
 void shinyManager_updateClean(ShinyManager * self) {
 
     _shinyManager_appendTicksToCurNode(self);
-    ShinyZone_preUpdateChain(&self->_firstZone);
+    shinyZone_preUpdateChain(&self->_firstZone);
 
     self->_firstUpdate = FALSE;
     shinyNode_updateTreeClean(&self->_rootNode);
-    ShinyZone_updateChainClean(&self->_firstZone);
+    shinyZone_updateChainClean(&self->_firstZone);
 }
 
 
@@ -217,7 +217,7 @@ ShinyNode * _shinyManager_lookupNode(
 
     /* at this point `foundNode` points to empty slot in the table. */
     if (a_zone->zoneState == SHINY_ZONE_STATE_HIDDEN) { /* zone is not initialized */
-        ShinyZone_init(a_zone, self->_lastZone);
+        shinyZone_init(a_zone, self->_lastZone);
 
         self->_lastZone = a_zone;
         self->_zoneCount++;
@@ -356,7 +356,7 @@ void _shinyManager_resizeNodeTable(ShinyManager * self, uint32_t newSlotCount) {
 /*---------------------------------------------------------------------------*/
 
 void shinyManager_resetZones(ShinyManager * self) {
-    ShinyZone_resetChain(&self->_firstZone);
+    shinyZone_resetChain(&self->_firstZone);
     self->_lastZone = &self->_firstZone;
     self->_zoneCount = 1;
 }

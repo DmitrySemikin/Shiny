@@ -33,33 +33,33 @@ struct ShinyZone {
 };
 
 
-SHINY_INLINE void ShinyZone_init(ShinyZone * self, ShinyZone * a_prev) {
+SHINY_INLINE void shinyZone_init(ShinyZone * self, ShinyZone * previousZone) {
     self->zoneState = SHINY_ZONE_STATE_INITIALIZED;
-    a_prev->next = self;
+    previousZone->next = self;
 }
 
 /* TODO: Seems to be unused. If true, remove it. */
-SHINY_INLINE void ShinyZone_uninit(ShinyZone * self) {
+SHINY_INLINE void shinyZone_uninit(ShinyZone * self) {
     self->zoneState = SHINY_ZONE_STATE_HIDDEN;
     self->next = NULL;
 }
 
 /** Clear current values of `ShinyData` of all Zones in the chain starting from this one. */
-SHINY_API void ShinyZone_preUpdateChain(ShinyZone *startZone);
-SHINY_API void ShinyZone_updateChain(ShinyZone *first, float a_damping);
-SHINY_API void ShinyZone_updateChainClean(ShinyZone *first);
+SHINY_API void shinyZone_preUpdateChain(ShinyZone * startZone);
+SHINY_API void shinyZone_updateChain(ShinyZone * startZone, float damping);
+SHINY_API void shinyZone_updateChainClean(ShinyZone * startZone);
 
-SHINY_API void ShinyZone_resetChain(ShinyZone *first);
+SHINY_API void shinyZone_resetChain(ShinyZone * startZone);
 
-SHINY_API ShinyZone* ShinyZone_sortChain(ShinyZone **first);
+SHINY_API ShinyZone* shinyZone_sortChain(ShinyZone ** startZone);
 
-SHINY_INLINE float ShinyZone_compare(ShinyZone *a, ShinyZone *b) {
-    return a->data.selfTicks.avg - b->data.selfTicks.avg;
+SHINY_INLINE float shinyZone_compare(ShinyZone * left, ShinyZone * right) {
+    return left->data.selfTicks.avg - right->data.selfTicks.avg;
 }
 
-SHINY_API void ShinyZone_clear(ShinyZone* self);
+SHINY_API void shinyZone_clear(ShinyZone * self);
 
-SHINY_API void ShinyZone_enumerateZones(const ShinyZone* a_zone, void (*a_func)(const ShinyZone*));
+SHINY_API void shinyZone_enumerateZones(const ShinyZone * startZone, void (*functionToApply)(const ShinyZone*));
 
 #ifdef __cplusplus
 } // extern "C"
@@ -70,11 +70,18 @@ SHINY_API void ShinyZone_enumerateZones(const ShinyZone* a_zone, void (*a_func)(
 /* C++ API */
 
 #ifdef __cplusplus
-template <class T>
-void ShinyZone_enumerateZones(const ShinyZone* a_zone, T* a_this, void (T::*a_func)(const ShinyZone*)) {
-    (a_this->*a_func)(a_zone);
 
-    if (a_zone->next) ShinyZone_enumerateZones(a_zone->next, a_this, a_func);
+template <class T>
+void shinyZone_enumerateZones(
+        const ShinyZone * startZone,
+        T * targetObject,
+        void (T::*methodToApply)(const ShinyZone*)
+) {
+    (targetObject->*methodToApply)(startZone);
+
+    if (startZone->next) {
+        shinyZone_enumerateZones(startZone->next, targetObject, methodToApply);
+    }
 }
 
 #endif // __cplusplus
