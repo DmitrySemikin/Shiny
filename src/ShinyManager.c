@@ -64,7 +64,7 @@ ShinyManager shinyManagerInstance = {
 
 };
 
-ShinyNode * _shinyManager_dummyNodeTable[] = {NULL };
+ShinyNode * _shinyManager_dummyNodeTable[] = { NULL };
 
 
 /*---------------------------------------------------------------------------*/

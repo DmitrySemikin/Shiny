@@ -20,7 +20,7 @@
 #define SHINY_IS_COMPILED   TRUE
 #endif
 
-/** Use -DSHINY_STATIC_LINK=0 to build shiny as a dynamic library (instead of satic). */
+/** Use -DSHINY_STATIC_LINK=0 to build shiny as a dynamic library (instead of static). */
 #ifndef SHINY_STATIC_LINK
 #define SHINY_STATIC_LINK   TRUE
 #endif
@@ -72,20 +72,6 @@
     #define SHINY_API   SHINY_EXPORT
 #endif
 
-
-
-/* Structures and typedefs used by Shiny */
-
-/* TODO: This one should not be here. Move it to the appropriate location*/
-/* TODO: Rename types not to use leading underscore*/
-#if SHINY_IS_COMPILED == TRUE
-struct ShinyNode;
-struct ShinyZone;
-
-/* TODO: This one should not be here. Move it to the appropriate location */
-typedef struct ShinyNode *  ShinyNodeCache;
-typedef struct ShinyNode *  ShinyNodeTable;
-#endif
 
 /*====================================================================================================================*/
 
