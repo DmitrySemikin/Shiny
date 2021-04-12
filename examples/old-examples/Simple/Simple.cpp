@@ -2,12 +2,10 @@
 
 #ifdef _WIN32
     #define WIN32_LEAN_AND_MEAN
-    #include <Windows.h> // Sleep
+    #include <windows.h> // Sleep
 #else // assume POSIX
     #include <unistd.h> // usleep
 #endif
-
-#include "Shared.h"
 
 
 /*---------------------------------------------------------------------------*/
@@ -23,10 +21,21 @@ void millisleep(unsigned int milliseconds) {
 
 /*---------------------------------------------------------------------------*/
 
-void YetMoreMath() {
-    PROFILE_SHARED_BLOCK(Math); // profile until end of block (only supported in c++)
+void LazyHelloWorld() {
+    PROFILE_FUNC(); // profile until end of block (only supported in c++)
 
-    // do stuff
+    millisleep(100);
+}
+
+
+/*---------------------------------------------------------------------------*/
+
+void HelloWorld() {
+    PROFILE_BEGIN(Hello_World__This_is_Shiny); // profile until PROFILE_END()
+
+    millisleep(100);
+
+    PROFILE_END();
 }
 
 
@@ -34,15 +43,9 @@ void YetMoreMath() {
 
 int main() {
 
-    DoSomeMath();
-    YetMoreMath();
-    Recursion(12);
+    HelloWorld();
 
-#ifdef _WIN32
-    ExecuteCommand("cls");
-#else
-    ExecuteCommand("clear");
-#endif
+    LazyHelloWorld();
 
     PROFILE_UPDATE(); // update all profiles
     PROFILE_OUTPUT(NULL); // print to terminal

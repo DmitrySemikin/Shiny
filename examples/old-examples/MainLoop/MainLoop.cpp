@@ -25,7 +25,7 @@ THE SOFTWARE.
 #include "Shiny.h"
 
 #ifdef _WIN32
-#include <Windows.h> // Sleep
+#include <windows.h> // Sleep
 #else // assume POSIX
 #include <unistd.h> // usleep
 #endif

@@ -1,3 +1,3 @@
-add_subdirectory(Simple)
-add_subdirectory(Advanced)
-add_subdirectory(MainLoop)
+add_subdirectory(old-examples/Simple)
+add_subdirectory(old-examples/Advanced)
+add_subdirectory(old-examples/MainLoop)
